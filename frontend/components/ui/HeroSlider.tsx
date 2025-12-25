@@ -50,7 +50,7 @@ export default function HeroSlider({ banners }: { banners: Banner[] }) {
                         className="block w-full h-full"
                     >
                         <img
-                            src={`${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000'}/storage/${banners[currentIndex].image_path}`}
+                            src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${banners[currentIndex].image_path}`}
                             alt={banners[currentIndex].title || 'Hero Banner'}
                             className="w-full h-full object-cover"
                         />

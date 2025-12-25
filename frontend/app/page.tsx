@@ -104,7 +104,7 @@ export default function Home() {
                   className="block relative w-[300px] h-[160px] md:w-[400px] md:h-[200px] flex-shrink-0 rounded-2xl overflow-hidden transition-transform hover:scale-[1.02]"
                 >
                   <img
-                    src={`${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000'}/storage/${banner.image_path}`}
+                    src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${banner.image_path}`}
                     alt={banner.title || 'Banner'}
                     className="w-full h-full object-cover"
                   />
@@ -133,8 +133,8 @@ export default function Home() {
                   <Link href={`/offer/${offer.id}`} className="block transform hover:scale-105 transition duration-300">
                     <OfferCard
                       brand={offer.brand?.name || 'Unknown'}
-                      logo={offer.brand?.logo ? `${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000'}/storage/${offer.brand.logo}` : undefined}
-                      image={offer.how_to_claim_image ? `${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000'}/storage/${offer.how_to_claim_image}` : undefined}
+                      logo={offer.brand?.logo ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${offer.brand.logo}` : undefined}
+                      image={offer.how_to_claim_image ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${offer.how_to_claim_image}` : undefined}
                       description={offer.title}
                       code={offer.code}
                       expiry={offer.valid_to ? new Date(offer.valid_to).toLocaleDateString() : 'No expiry'}
@@ -186,7 +186,7 @@ export default function Home() {
                     <div className="w-20 h-20 bg-white dark:bg-neutral-800 rounded-full shadow-md flex items-center justify-center border border-neutral-100 dark:border-neutral-700 overflow-hidden group-hover:border-[var(--color-primary)] transition">
                       {brand.logo ? (
                         <img
-                          src={`${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000'}/storage/${brand.logo}`}
+                          src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${brand.logo}`}
                           alt={brand.name}
                           className="w-full h-full object-cover"
                         />
@@ -230,8 +230,8 @@ export default function Home() {
             <Link key={offer.id} href={`/offer/${offer.id}`}>
               <OfferCard
                 brand={offer.brand?.name || 'Unknown Brand'}
-                logo={offer.brand?.logo ? `${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000'}/storage/${offer.brand.logo}` : undefined}
-                image={offer.how_to_claim_image ? `${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000'}/storage/${offer.how_to_claim_image}` : undefined}
+                logo={offer.brand?.logo ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${offer.brand.logo}` : undefined}
+                image={offer.how_to_claim_image ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${offer.how_to_claim_image}` : undefined}
                 description={offer.title}
                 code={offer.code}
                 expiry={offer.valid_to ? new Date(offer.valid_to).toLocaleDateString() : 'No expiry'}
