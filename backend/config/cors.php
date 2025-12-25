@@ -18,6 +18,7 @@ return [
     'allowed_methods' => ['*'],
     'allowed_origins' => [
         'https://get-offer.live',
+        'https://www.get-offer.live',
     ],
     'allowed_headers' => ['*'],
     'supports_credentials' => true,
