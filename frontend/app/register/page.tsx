@@ -42,14 +42,20 @@ export default function Register() {
                 }
             }
         } catch (err: any) {
-            setError(err.response?.data?.message || (step === 1 ? 'Registration failed' : 'Verification failed'));
+            if (err.response?.data?.errors) {
+                // If validation errors exist, format them
+                const errorMessages = Object.values(err.response.data.errors).flat().join(', ');
+                setError(errorMessages);
+            } else {
+                setError(err.response?.data?.message || (step === 1 ? 'Registration failed' : 'Verification failed'));
+            }
         } finally {
             setLoading(false);
         }
     };
 
     const handleGoogleLogin = () => {
-        window.location.href = `${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000'}/api/auth/google/redirect`;
+        window.location.href = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/google/redirect`;
     };
 
     return (
