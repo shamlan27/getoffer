@@ -19,8 +19,8 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => [env('FRONTEND_URL', 'https://get-offer.live',
-        'https://www.get-offer.live', 'http://localhost:3000' ,)],
+    'allowed_origins' => ['FRONTEND_URL', 'https://get-offer.live',
+        'https://www.get-offer.live', 'http://localhost:3000' ,],
 
     'allowed_origins_patterns' => [],
 
