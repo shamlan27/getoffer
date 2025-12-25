@@ -18,8 +18,7 @@ return [
     'allowed_methods' => ['*'],
     'allowed_origins' => [
         'https://get-offer.live',
-        'http://localhost:3000',
     ],
     'allowed_headers' => ['*'],
-    'supports_credentials' => false,
+    'supports_credentials' => true,
 ];
