@@ -50,3 +50,9 @@ EXPOSE 8080
 
 CMD php artisan serve --host=0.0.0.0 --port=8080
 
+  
+# Entrypoint setup  
+COPY docker-entrypoint.sh /usr/local/bin/  
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh  
+ENTRYPOINT [\" "docker-entrypoint.sh\]  
+CMD [\php\, \artisan\, \serve\, \--host=0.0.0.0\, \--port=8080\] 
