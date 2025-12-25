@@ -18,8 +18,13 @@ COPY . .
 # Install PHP deps
 RUN composer install --no-dev --optimize-autoloader
 
+# Publish Filament assets (THIS FIXES UI)
+RUN php artisan filament:assets
+
 # Install Node deps & build assets (THIS FIXES FILAMENT)
 RUN npm install && npm run build
+
+
 
 # Permissions
 RUN chown -R www-data:www-data /var/www
