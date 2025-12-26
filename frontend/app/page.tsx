@@ -131,13 +131,15 @@ export default function Home() {
               {marqueeOffers.map((offer: any, idx: number) => (
                 <div key={`${offer.id}-${idx}`} className="w-[300px] flex-shrink-0">
                   <Link href={`/offer/${offer.id}`} className="block transform hover:scale-105 transition duration-300">
-                    logo={offer.brand?.logo_url || (offer.brand?.logo ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${offer.brand.logo}` : undefined)}
-                    image={offer.how_to_claim_image_url || (offer.how_to_claim_image ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${offer.how_to_claim_image}` : undefined)}
-                    description={offer.title}
-                    code={offer.code}
-                    expiry={offer.valid_to ? new Date(offer.valid_to).toLocaleDateString() : 'No expiry'}
-                    verified={true}
-                    variant="featured"
+                    <OfferCard
+                      brand={offer.brand?.name || 'Unknown'}
+                      logo={offer.brand?.logo_url || (offer.brand?.logo ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${offer.brand.logo}` : undefined)}
+                      image={offer.how_to_claim_image_url || (offer.how_to_claim_image ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${offer.how_to_claim_image}` : undefined)}
+                      description={offer.title}
+                      code={offer.code}
+                      expiry={offer.valid_to ? new Date(offer.valid_to).toLocaleDateString() : 'No expiry'}
+                      verified={true}
+                      variant="featured"
                     />
                   </Link>
                 </div>
