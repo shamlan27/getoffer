@@ -49,6 +49,7 @@ return [
 
        'cloudinary' => [
             'driver' => 'cloudinary',
+            'root'   => 'uploads',
             'cloud_name' => env('CLOUDINARY_CLOUD_NAME'), // Some versions check here
             'api_key'    => env('CLOUDINARY_API_KEY'),    // Some versions check here
             'api_secret' => env('CLOUDINARY_API_SECRET'), // Some versions check here
