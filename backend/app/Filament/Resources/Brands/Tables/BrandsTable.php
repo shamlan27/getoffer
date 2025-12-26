@@ -17,8 +17,12 @@ class BrandsTable
             ->columns([
                 TextColumn::make('name')
                     ->searchable(),
-                \Filament\Tables\Columns\ImageColumn::make('logo')
-                    ->disk('cloudinary'),
+                \Filament\Tables\Columns\ImageColumn::make('logo_display')
+    ->label('Logo')
+    ->state(function ($record) {
+        // Forcefully ask Cloudinary for the link
+        return \Illuminate\Support\Facades\Storage::disk('cloudinary')->url($record->logo);
+    }),
                 TextColumn::make('website')
                     ->searchable(),
                 IconColumn::make('is_active')
