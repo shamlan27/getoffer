@@ -26,8 +26,7 @@ class Brand extends Model
             return $this->logo;
         }
 
-        // Otherwise, build the correct Cloudinary URL
-        $cloudName = config('filesystems.disks.cloudinary.cloud_name');
-        return "https://res.cloudinary.com/{$cloudName}/image/upload/" . $this->logo;
+        // Otherwise, build the correct Cloudinary URL using the Storage facade
+        return \Illuminate\Support\Facades\Storage::disk('cloudinary')->url($this->logo);
     }
 }
