@@ -48,25 +48,18 @@ return [
         ],
 
        'cloudinary' => [
-    'driver' => 'cloudinary',
-    // We explicitly add the 'cloud' array here as a fallback
-        'cloud_name' => env('CLOUDINARY_CLOUD_NAME'),
-        'api_key'    => env('CLOUDINARY_API_KEY'),
-        'api_secret' => env('CLOUDINARY_API_SECRET'),
-
-        'key'        => env('CLOUDINARY_API_KEY'),
-        'secret'     => env('CLOUDINARY_API_SECRET'),
-        
-'cloud' => [
+            'driver' => 'cloudinary',
+            'cloud_name' => env('CLOUDINARY_CLOUD_NAME'), // Some versions check here
+            'api_key'    => env('CLOUDINARY_API_KEY'),    // Some versions check here
+            'api_secret' => env('CLOUDINARY_API_SECRET'), // Some versions check here
+            'cloud' => [
                 'cloud_name' => env('CLOUDINARY_CLOUD_NAME'),
                 'api_key'    => env('CLOUDINARY_API_KEY'),
                 'api_secret' => env('CLOUDINARY_API_SECRET'),
-                'key'        => env('CLOUDINARY_API_KEY'),
-                'secret'     => env('CLOUDINARY_API_SECRET'),
+                'url'        => env('CLOUDINARY_URL'), // Fallback for the full URL
             ],
-
-    'notification_url' => env('CLOUDINARY_NOTIFICATION_URL'),
-],
+            'url' => env('CLOUDINARY_URL'), // Often needed for the "root" URL generation
+        ],
 
         's3' => [
             'driver' => 's3',
