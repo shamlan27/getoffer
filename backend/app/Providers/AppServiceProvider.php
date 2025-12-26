@@ -27,19 +27,17 @@ class AppServiceProvider extends ServiceProvider
         }
 
         try {
-             if (class_exists(\CloudinaryLabs\CloudinaryLaravel\CloudinaryEngine::class)) {
-                $this->app['storage']->extend('cloudinary', function ($app, $config) {
-                    return new \Illuminate\Filesystem\FilesystemAdapter(
-                        new \League\Flysystem\Filesystem(
-                            new \Cloudinary\Flysystem\CloudinaryAdapter($config)
-                        ),
-                        new \CloudinaryLabs\CloudinaryLaravel\CloudinaryEngine($config),
-                        $config
-                    );
-                });
-             }
+            $this->app['storage']->extend('cloudinary', function ($app, $config) {
+                return new \Illuminate\Filesystem\FilesystemAdapter(
+                    new \League\Flysystem\Filesystem(
+                        new \Cloudinary\Flysystem\CloudinaryAdapter($config)
+                    ),
+                    new \CloudinaryLabs\CloudinaryLaravel\CloudinaryEngine($config),
+                    $config
+                );
+            });
         } catch (\Throwable $e) {
-            // Log or ignore if class not found to prevent crash during build
+             // Log or ignore
         }
     }
 }
