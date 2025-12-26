@@ -18,6 +18,7 @@ class BrandSchema
                 FileUpload::make('logo')
                     ->image()
                     ->disk('cloudinary')
+                    ->directory('brands')
                     ->imageEditor()
                     ->columnSpanFull(),
                 TextInput::make('website')
