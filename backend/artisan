@@ -5,6 +5,11 @@ use Illuminate\Foundation\Application;
 
 define('LARAVEL_START', microtime(true));
 
+// Register the Composer autoloader...
 require __DIR__.'/vendor/autoload.php';
 
-(require_once __DIR__.'/bootstrap/app.php')->handleRequest(Application::configure(basePath: __DIR__))->handleCommand(new Symfony\Component\Console\Input\ArgvInput, new Symfony\Component\Console\Output\ConsoleOutput);
+// Bootstrap Laravel and handle the command...
+$status = (require_once __DIR__.'/bootstrap/app.php')
+    ->handleCommand(new Symfony\Component\Console\Input\ArgvInput, new Symfony\Component\Console\Output\ConsoleOutput);
+
+exit($status);
