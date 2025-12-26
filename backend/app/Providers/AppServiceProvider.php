@@ -25,15 +25,5 @@ class AppServiceProvider extends ServiceProvider
         if (config('app.env') === 'production') {
             URL::forceScheme('https');
         }
-
-        $this->app['storage']->extend('cloudinary', function ($app, $config) {
-            return new \Illuminate\Filesystem\FilesystemAdapter(
-                new \League\Flysystem\Filesystem(
-                    new \Cloudinary\Flysystem\CloudinaryAdapter($config)
-                ),
-                new \CloudinaryLabs\CloudinaryLaravel\CloudinaryEngine($config),
-                $config
-            );
-        });
     }
 }
