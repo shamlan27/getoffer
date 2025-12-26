@@ -39,3 +39,14 @@ Route::get('/debug-root', function () {
         'full_disk_config' => config('filesystems.disks.cloudinary'),
     ]);
 });
+
+
+Route::get('/debug-url', function () {
+    // 1. Ask the system to generate a URL using the 'cloudinary' disk
+    $url = Storage::disk('cloudinary')->url('brands/test_image.jpg');
+    
+    return [
+        'generated_url' => $url,
+        'is_correct' => str_contains($url, 'cloudinary.com') ? 'YES' : 'NO - System is generating local links!',
+    ];
+});
