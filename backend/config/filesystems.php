@@ -47,11 +47,16 @@ return [
             'report' => false,
         ],
 
-        'cloudinary' => [
-            'driver' => 'cloudinary',
-            'folder' => env('CLOUDINARY_FOLDER', 'app'),
-            'notification_url' => env('CLOUDINARY_NOTIFICATION_URL'),
-        ],
+       'cloudinary' => [
+    'driver' => 'cloudinary',
+    // We explicitly add the 'cloud' array here as a fallback
+    'cloud' => [
+        'cloud_name' => env('CLOUDINARY_CLOUD_NAME'),
+        'api_key'    => env('CLOUDINARY_API_KEY'),
+        'api_secret' => env('CLOUDINARY_API_SECRET'),
+    ],
+    'notification_url' => env('CLOUDINARY_NOTIFICATION_URL'),
+],
 
         's3' => [
             'driver' => 's3',
