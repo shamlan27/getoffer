@@ -60,6 +60,12 @@ return [
             'report' => false,
         ],
 
+        'cloudinary' => [
+            'driver' => 'cloudinary',
+            'folder' => env('CLOUDINARY_FOLDER', 'app'),
+            'notification_url' => env('CLOUDINARY_NOTIFICATION_URL'),
+        ],
+
     ],
 
     /*

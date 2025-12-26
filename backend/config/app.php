@@ -125,7 +125,7 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
-    App\Providers\FilamentServiceProvider::class,
+
 
 
 ];
