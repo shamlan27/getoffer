@@ -5,7 +5,7 @@ namespace App\Filament\Resources\Brands;
 use App\Filament\Resources\Brands\Pages\CreateBrand;
 use App\Filament\Resources\Brands\Pages\EditBrand;
 use App\Filament\Resources\Brands\Pages\ListBrands;
-use App\Filament\Resources\Brands\Schemas\BrandForm;
+use App\Filament\Resources\Brands\Schemas\BrandSchema;
 use App\Filament\Resources\Brands\Tables\BrandsTable;
 use App\Models\Brand;
 use BackedEnum;
@@ -24,7 +24,7 @@ class BrandResource extends Resource
 
     public static function form(Schema $schema): Schema
     {
-        return BrandForm::configure($schema);
+        return BrandSchema::configure($schema);
     }
 
     public static function table(Table $table): Table
