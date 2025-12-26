@@ -50,3 +50,12 @@ Route::get('/debug-url', function () {
         'is_correct' => str_contains($url, 'cloudinary.com') ? 'YES' : 'NO - System is generating local links!',
     ];
 });
+
+Route::get('/debug-db', function () {
+    $brand = Brand::latest()->first(); // Get the most recent brand
+    return [
+        'id' => $brand->id,
+        'logo_value_in_db' => $brand->logo, // This is what we need to see
+        'disk_config' => config('filesystems.disks.cloudinary.driver'),
+    ];
+});
