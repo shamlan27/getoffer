@@ -17,12 +17,13 @@ export default function HeroSlider({ banners }: { banners: Banner[] }) {
     const [currentIndex, setCurrentIndex] = useState(0);
 
     useEffect(() => {
+        console.log('HeroSlider Banners:', banners);
         if (banners.length <= 1) return;
         const interval = setInterval(() => {
             setCurrentIndex((prev) => (prev + 1) % banners.length);
         }, 5000);
         return () => clearInterval(interval);
-    }, [banners.length]);
+    }, [banners]);
 
     const handleNext = () => {
         setCurrentIndex((prev) => (prev + 1) % banners.length);
