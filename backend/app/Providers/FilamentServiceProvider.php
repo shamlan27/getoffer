@@ -16,6 +16,6 @@ class FilamentServiceProvider extends ServiceProvider
             URL::forceScheme('https');
             URL::forceRootUrl(config('app.url'));
         });
-        Config::set('filesystems.disks.cloudinary.root', 'uploads');
     }
 }
+
