@@ -2,23 +2,32 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Brand extends Model
 {
-    protected $fillable = [
-        'name',
-        'logo',
-        'website',
-        'is_active',
-    ];
+    use HasFactory;
 
-    protected $casts = [
-        'is_active' => 'boolean',
-    ];
+    protected $guarded = [];
 
-    public function offers()
+    // 👇 1. THIS ADDS A NEW FIELD TO YOUR API RESPONSE
+    protected $appends = ['logo_url'];
+
+    // 👇 2. THIS GENERATES THE FULL CLOUDINARY LINK
+    public function getLogoUrlAttribute()
     {
-        return $this->hasMany(Offer::class);
+        if (empty($this->logo)) {
+            return null;
+        }
+
+        // If it's already a link, return it
+        if (str_starts_with($this->logo, 'http')) {
+            return $this->logo;
+        }
+
+        // Otherwise, build the correct Cloudinary URL
+        $cloudName = config('filesystems.disks.cloudinary.cloud_name');
+        return "https://res.cloudinary.com/{$cloudName}/image/upload/" . $this->logo;
     }
 }
