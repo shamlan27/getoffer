@@ -17,8 +17,7 @@ class BrandsTable
             ->columns([
                 TextColumn::make('name')
                     ->searchable(),
-                \Filament\Tables\Columns\ImageColumn::make('logo')
-                    ->disk('cloudinary'),
+                \Filament\Tables\Columns\ImageColumn::make('logo'),
                 TextColumn::make('website')
                     ->searchable(),
                 IconColumn::make('is_active')
