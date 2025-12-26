@@ -19,6 +19,7 @@ return [
     'allowed_origins' => [
         'https://get-offer.live',
         'https://www.get-offer.live',
+        'http://localhost:3000',
     ],
     'allowed_headers' => ['*'],
     'supports_credentials' => true,
