@@ -44,9 +44,13 @@ class Offer extends Model
 
         if (empty($cloudName)) {
             $cloudinaryUrl = config('cloudinary.cloud_url') ?? env('CLOUDINARY_URL');
-            if ($cloudinaryUrl && str_contains($cloudinaryUrl, '@')) {
+            if ($cloudinaryUrl) {
                 $parts = parse_url($cloudinaryUrl);
                 $cloudName = $parts['host'] ?? null;
+
+                if (empty($cloudName) && preg_match('/@([^@\/]+)/', $cloudinaryUrl, $matches)) {
+                    $cloudName = $matches[1];
+                }
             }
         }
 
