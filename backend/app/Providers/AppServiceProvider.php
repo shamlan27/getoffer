@@ -26,18 +26,14 @@ class AppServiceProvider extends ServiceProvider
             URL::forceScheme('https');
         }
 
-        try {
-            \Illuminate\Support\Facades\Storage::extend('cloudinary', function ($app, $config) {
-                return new \Illuminate\Filesystem\FilesystemAdapter(
-                    new \League\Flysystem\Filesystem(
-                        new \Cloudinary\Flysystem\CloudinaryAdapter($config)
-                    ),
-                    new \CloudinaryLabs\CloudinaryLaravel\CloudinaryEngine($config),
-                    $config
-                );
-            });
-        } catch (\Throwable $e) {
-            \Illuminate\Support\Facades\Log::error('Cloudinary driver registration failed: ' . $e->getMessage());
-        }
+        $this->app['storage']->extend('cloudinary', function ($app, $config) {
+            return new \Illuminate\Filesystem\FilesystemAdapter(
+                new \League\Flysystem\Filesystem(
+                    new \Cloudinary\Flysystem\CloudinaryAdapter($config)
+                ),
+                new \CloudinaryLabs\CloudinaryLaravel\CloudinaryEngine($config),
+                $config
+            );
+        });
     }
 }
