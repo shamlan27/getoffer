@@ -52,10 +52,16 @@ Route::get('/debug-url', function () {
 });
 
 Route::get('/debug-db', function () {
-    $brand = Brand::latest()->first(); // Get the most recent brand
+    // 1. Get the latest brand using the full path to the model
+    $brand = \App\Models\Brand::latest()->first();
+
+    if (!$brand) {
+        return ['error' => 'No brands found in the database. Please create one first.'];
+    }
+
     return [
         'id' => $brand->id,
-        'logo_value_in_db' => $brand->logo, // This is what we need to see
+        'logo_value_in_db' => $brand->logo, // <--- This shows exactly what is saved
         'disk_config' => config('filesystems.disks.cloudinary.driver'),
     ];
 });
