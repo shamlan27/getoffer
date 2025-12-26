@@ -28,8 +28,6 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
-            ->sidebarCollapsibleOnDesktop()
-            ->maxContentWidth(\Filament\Support\Enums\MaxWidth::Full)
             ->colors([
                 'primary' => Color::Amber,
             ])
