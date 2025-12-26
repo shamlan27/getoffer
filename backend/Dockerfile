@@ -39,13 +39,11 @@ RUN composer install \
 # Copy full Laravel app (artisan exists now)
 COPY . .
 
-RUN php artisan storage:link
+# RUN php artisan storage:link
 
 # Permissions
 RUN chmod -R 775 storage bootstrap/cache
 
 EXPOSE 8080
 
-
-
-CMD php artisan serve --host=0.0.0.0 --port=8080
+CMD php artisan storage:link && php artisan serve --host=0.0.0.0 --port=8080
