@@ -36,6 +36,7 @@ RUN composer install \
     --no-interaction \
     --no-scripts
 
+RUN php artisan storage:link
 
 # Copy full Laravel app (artisan exists now)
 COPY . .
