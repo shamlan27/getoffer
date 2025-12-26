@@ -25,5 +25,6 @@ class AppServiceProvider extends ServiceProvider
         if (config('app.env') === 'production') {
             URL::forceScheme('https');
         }
+        Config::set('filesystems.disks.cloudinary.root', 'uploads');
     }
 }
