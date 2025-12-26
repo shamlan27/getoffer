@@ -17,11 +17,16 @@ class BrandsTable
             ->columns([
                 TextColumn::make('name')
                     ->searchable(),
-                \Filament\Tables\Columns\ImageColumn::make('logo_display')
+                ImageColumn::make('logo')
     ->label('Logo')
+    ->disk('cloudinary')
     ->state(function ($record) {
-        // Forcefully ask Cloudinary for the link
-        return \Illuminate\Support\Facades\Storage::disk('cloudinary')->url($record->logo);
+        // SAFETY FIX: Manually build the URL string.
+        // This prevents the "NotFound" error from crashing the page.
+        $cloudName = config('filesystems.disks.cloudinary.cloud_name');
+        
+        // Return the standard Cloudinary URL format
+        return "https://res.cloudinary.com/{$cloudName}/image/upload/" . $record->logo;
     }),
                 TextColumn::make('website')
                     ->searchable(),
