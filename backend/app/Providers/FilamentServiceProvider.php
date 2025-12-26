@@ -17,6 +17,4 @@ class FilamentServiceProvider extends ServiceProvider
             URL::forceRootUrl(config('app.url'));
         });
     }
-
-    }
 }
