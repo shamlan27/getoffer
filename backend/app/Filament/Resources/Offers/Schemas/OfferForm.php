@@ -41,7 +41,7 @@ class OfferForm
                     ->required(),
                 FileUpload::make('how_to_claim_image')
                     ->image()
-                    ->disk('public')
+                    ->disk('cloudinary')
                     ->directory('offer-guides'),
                 RichEditor::make('description')
                     ->columnSpanFull()
