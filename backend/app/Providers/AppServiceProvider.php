@@ -12,7 +12,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        if (class_exists(\CloudinaryLabs\CloudinaryLaravel\CloudinaryServiceProvider::class)) {
+            $this->app->register(\CloudinaryLabs\CloudinaryLaravel\CloudinaryServiceProvider::class);
+        }
     }
 
     /**
