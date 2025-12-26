@@ -32,3 +32,10 @@ Route::get('/force-reset', function () {
         'message' => 'Cache cleared. Please try uploading again.',
     ]);
 });
+
+Route::get('/debug-root', function () {
+    return response()->json([
+        'root_value' => config('filesystems.disks.cloudinary.root'),
+        'full_disk_config' => config('filesystems.disks.cloudinary'),
+    ]);
+});
