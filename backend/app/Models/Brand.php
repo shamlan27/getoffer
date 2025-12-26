@@ -26,7 +26,26 @@ class Brand extends Model
             return $this->logo;
         }
 
-        // Otherwise, build the correct Cloudinary URL using the Storage facade
-        return \Illuminate\Support\Facades\Storage::disk('cloudinary')->url($this->logo);
+        // Robustly determine the Cloud Name
+        $cloudName = config('filesystems.disks.cloudinary.cloud_name') 
+                  ?? config('filesystems.disks.cloudinary.cloud.cloud_name')
+                  ?? config('cloudinary.cloud.cloud_name');
+
+        // Verify if we found a cloud name, if not, try to parse from CLOUDINARY_URL
+        if (empty($cloudName)) {
+            $cloudinaryUrl = config('cloudinary.cloud_url') ?? env('CLOUDINARY_URL');
+            if ($cloudinaryUrl && str_contains($cloudinaryUrl, '@')) {
+                // components: scheme://key:secret@cloud_name
+                $parts = parse_url($cloudinaryUrl);
+                $cloudName = $parts['host'] ?? null;
+            }
+        }
+
+        if (empty($cloudName)) {
+             // Fallback to avoid 500 error, though image will be broken
+             return null; 
+        }
+
+        return "https://res.cloudinary.com/{$cloudName}/image/upload/" . $this->logo;
     }
 }
