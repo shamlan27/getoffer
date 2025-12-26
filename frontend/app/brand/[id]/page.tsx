@@ -36,7 +36,7 @@ export default function BrandDetailPage() {
                     <div className="w-32 h-32 bg-white dark:bg-neutral-800 rounded-full shadow-lg flex items-center justify-center border-4 border-white dark:border-neutral-700 overflow-hidden mb-6">
                         {brand.logo ? (
                             <img
-                                src={`${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000'}/storage/${brand.logo}`}
+                                src={brand.logo_url || `${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000'}/storage/${brand.logo}`}
                                 alt={brand.name}
                                 className="w-full h-full object-cover"
                             />

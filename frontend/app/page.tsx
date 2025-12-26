@@ -133,7 +133,7 @@ export default function Home() {
                   <Link href={`/offer/${offer.id}`} className="block transform hover:scale-105 transition duration-300">
                     <OfferCard
                       brand={offer.brand?.name || 'Unknown'}
-                      logo={offer.brand?.logo ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${offer.brand.logo}` : undefined}
+                      logo={offer.brand?.logo_url || (offer.brand?.logo ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${offer.brand.logo}` : undefined)}
                       image={offer.how_to_claim_image ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${offer.how_to_claim_image}` : undefined}
                       description={offer.title}
                       code={offer.code}
@@ -186,7 +186,7 @@ export default function Home() {
                     <div className="w-20 h-20 bg-white dark:bg-neutral-800 rounded-full shadow-md flex items-center justify-center border border-neutral-100 dark:border-neutral-700 overflow-hidden group-hover:border-[var(--color-primary)] transition">
                       {brand.logo ? (
                         <img
-                          src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${brand.logo}`}
+                          src={brand.logo_url || `${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${brand.logo}`}
                           alt={brand.name}
                           className="w-full h-full object-cover"
                         />
@@ -230,7 +230,7 @@ export default function Home() {
             <Link key={offer.id} href={`/offer/${offer.id}`}>
               <OfferCard
                 brand={offer.brand?.name || 'Unknown Brand'}
-                logo={offer.brand?.logo ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${offer.brand.logo}` : undefined}
+                logo={offer.brand?.logo_url || (offer.brand?.logo ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${offer.brand.logo}` : undefined)}
                 image={offer.how_to_claim_image ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${offer.how_to_claim_image}` : undefined}
                 description={offer.title}
                 code={offer.code}

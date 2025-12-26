@@ -37,7 +37,7 @@ export default function BrandsPage() {
                                     <div className="w-24 h-24 bg-white dark:bg-neutral-800 rounded-full flex items-center justify-center border border-neutral-100 dark:border-neutral-700 overflow-hidden mb-4 group-hover:border-[var(--color-primary)] transition">
                                         {brand.logo ? (
                                             <img
-                                                src={`${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000'}/storage/${brand.logo}`}
+                                                src={brand.logo_url || `${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000'}/storage/${brand.logo}`}
                                                 alt={brand.name}
                                                 className="w-full h-full object-cover"
                                             />
