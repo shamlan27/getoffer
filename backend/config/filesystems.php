@@ -47,6 +47,12 @@ return [
             'report' => false,
         ],
 
+        'cloudinary' => [
+            'driver' => 'cloudinary',
+            'folder' => env('CLOUDINARY_FOLDER', 'app'),
+            'notification_url' => env('CLOUDINARY_NOTIFICATION_URL'),
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),
@@ -60,11 +66,7 @@ return [
             'report' => false,
         ],
 
-        'cloudinary' => [
-            'driver' => 'cloudinary',
-            'folder' => env('CLOUDINARY_FOLDER', 'app'),
-            'notification_url' => env('CLOUDINARY_NOTIFICATION_URL'),
-        ],
+
 
     ],
 
