@@ -7,7 +7,7 @@ Thumbs.db
 .idea/
 
 # Backend - Ignored as it is a separate repository
-backend/
+
 
 # Frontend (Next.js)
 frontend/node_modules/
