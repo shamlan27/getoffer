@@ -13,14 +13,22 @@ Route::get('/nuke-cache', function () {
     return 'Cache NUKED. Now try your admin page.';
 });
 
-Route::get('/hard-reset', function () {
-    // This physically deletes the cache file from the server
+Route::get('/force-reset', function () {
+    // 1. Physically delete the cached config file
     $file = base_path('bootstrap/cache/config.php');
-    
     if (file_exists($file)) {
-        unlink($file); // DELETE IT
-        return 'Config cache file DELETED. The server is now forced to use your new settings.';
+        unlink($file);
+        $status = "DELETED cached config file.";
+    } else {
+        $status = "No cached config file found (system is already using live files).";
     }
-    
-    return 'No config cache file found. The server is already using live settings.';
+
+    // 2. Clear other caches just in case
+    \Illuminate\Support\Facades\Artisan::call('cache:clear');
+    \Illuminate\Support\Facades\Artisan::call('view:clear');
+
+    return response()->json([
+        'status' => $status,
+        'message' => 'Cache cleared. Please try uploading again.',
+    ]);
 });
