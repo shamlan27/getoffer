@@ -22,13 +22,6 @@ return [
     'notification_url' => env('CLOUDINARY_NOTIFICATION_URL'),
 
 
-
-    'cloud' => [
-        'cloud_name' => env('CLOUDINARY_CLOUD_NAME'),
-        'api_key'    => env('CLOUDINARY_API_KEY', env('CLOUDINARY_KEY')),
-        'api_secret' => env('CLOUDINARY_API_SECRET', env('CLOUDINARY_SECRET')),
-    ],
-    
     /*
     |--------------------------------------------------------------------------
     | Cloudinary Configuration
@@ -40,6 +33,20 @@ return [
     |
     */
     'cloud_url' => env('CLOUDINARY_URL', 'cloudinary://'.env('CLOUDINARY_KEY').':'.env('CLOUDINARY_SECRET').'@'.env('CLOUDINARY_CLOUD_NAME')),
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | ADD THIS MISSING SECTION
+    |--------------------------------------------------------------------------
+    | This is the key causing the "Undefined array key 'cloud'" error.
+    */
+    'cloud' => [
+        'cloud_name' => env('CLOUDINARY_CLOUD_NAME'),
+        'api_key'    => env('CLOUDINARY_API_KEY', env('CLOUDINARY_KEY')),
+        'api_secret' => env('CLOUDINARY_API_SECRET', env('CLOUDINARY_SECRET')),
+    ],
+    
 
     /**
      * Upload Preset From Cloudinary Dashboard
