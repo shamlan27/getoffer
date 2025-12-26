@@ -8,6 +8,7 @@ import SearchBar from './SearchBar';
 interface Banner {
     id: number;
     image_path: string;
+    image_url?: string;
     title?: string;
     link?: string;
 }
@@ -50,7 +51,7 @@ export default function HeroSlider({ banners }: { banners: Banner[] }) {
                         className="block w-full h-full"
                     >
                         <img
-                            src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${banners[currentIndex].image_path}`}
+                            src={banners[currentIndex].image_url || `${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${banners[currentIndex].image_path}`}
                             alt={banners[currentIndex].title || 'Hero Banner'}
                             className="w-full h-full object-cover"
                         />

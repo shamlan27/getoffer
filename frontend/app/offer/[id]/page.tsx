@@ -118,7 +118,7 @@ export default function OfferDetail() {
                             </h3>
                             <div className="rounded-xl overflow-hidden border border-neutral-200 dark:border-neutral-700">
                                 <img
-                                    src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${offer.how_to_claim_image}`}
+                                    src={offer.how_to_claim_image_url || `${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${offer.how_to_claim_image}`}
                                     alt="How to claim instructions"
                                     className="w-full h-auto object-cover"
                                 />
