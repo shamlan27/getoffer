@@ -18,3 +18,12 @@ Route::get('/send-smtp-test', function () {
 
     return 'SMTP email sent';
 });
+
+Route::get('/smtp-test', function () {
+    Mail::raw('SMTP working!', function ($message) {
+        $message->to('shamlanm08@gmail.com')
+                ->subject('Brevo SMTP Test');
+    });
+
+    return 'SMTP email sent';
+});
