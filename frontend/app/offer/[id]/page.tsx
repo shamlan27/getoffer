@@ -57,11 +57,11 @@ export default function OfferDetail() {
             <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
                 {/* Main Content */}
                 <div className="md:col-span-2 space-y-6">
-                    <div className="bg-[#111] rounded-3xl p-8 shadow-xl border border-neutral-800 relative overflow-hidden">
+                    <div className="bg-[#050505] rounded-3xl p-8 shadow-xl border border-[#111] relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--color-primary)] opacity-10 rounded-bl-full pointer-events-none" />
 
                         <div className="flex items-center space-x-4 mb-6">
-                            <div className="w-16 h-16 bg-[#1A1A1A] rounded-full flex items-center justify-center shadow-lg border border-neutral-700 overflow-hidden">
+                            <div className="w-16 h-16 bg-black rounded-full flex items-center justify-center shadow-lg border border-[#111] overflow-hidden">
                                 {offer.brand?.logo || offer.brand?.logo_url ? (
                                     <img
                                         src={offer.brand.logo_url || `${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${offer.brand.logo}`}
@@ -101,7 +101,7 @@ export default function OfferDetail() {
                                 </button>
                             </div>
                         ) : (
-                            <div className="bg-[#050505] border border-neutral-800 rounded-xl p-6 flex flex-col items-center justify-center text-center">
+                            <div className="bg-[#050505] border border-[#111] rounded-xl p-6 flex flex-col items-center justify-center text-center">
                                 <span className="text-lg font-bold text-white mb-4">No Code Required</span>
                                 <a href={offer.brand?.website || '#'} target="_blank" className="bg-[var(--color-secondary)] text-white px-8 py-3 rounded-full font-bold hover:opacity-90 transition flex items-center shadow-lg">
                                     Get Deal <ExternalLink className="w-4 h-4 ml-2" />
@@ -125,7 +125,7 @@ export default function OfferDetail() {
 
                     {/* How to Claim Image */}
                     {offer.how_to_claim_image && (
-                        <div className="bg-[#111] rounded-2xl p-6 shadow-sm border border-neutral-800">
+                        <div className="bg-[#050505] rounded-2xl p-6 shadow-sm border border-[#111]">
                             <h3 className="font-bold text-lg mb-4 flex items-center text-white">
                                 <Info className="w-5 h-5 mr-2 text-[var(--color-primary)]" />
                                 How to Claim
@@ -174,7 +174,7 @@ export default function OfferDetail() {
                         <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-white/10 rounded-full" />
                     </div>
 
-                    <div className="bg-[#111] rounded-2xl p-6 shadow-sm border border-neutral-800 text-white">
+                    <div className="bg-[#050505] rounded-2xl p-6 shadow-sm border border-[#111] text-white">
                         <h3 className="font-bold mb-4">Share this offer</h3>
                         <div className="flex space-x-2">
                             {['Facebook', 'WhatsApp', 'Twitter', 'Copy Link'].map(platform => (
@@ -196,7 +196,7 @@ export default function OfferDetail() {
                                             alert('Link copied to clipboard!');
                                         }
                                     }}
-                                    className="flex-1 bg-neutral-800 py-2 rounded-lg text-xs font-medium hover:bg-neutral-700 transition"
+                                    className="flex-1 bg-black border border-[#111] py-2 rounded-lg text-xs font-medium hover:bg-[#111] transition"
                                 >
                                     {platform}
                                 </button>

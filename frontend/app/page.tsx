@@ -143,7 +143,7 @@ export default function Home() {
       )}
 
       {/* Stats Bar */}
-      <section className="bg-[#000000] border-y border-white/5 py-4">
+      <section className="bg-[#000000] border-y border-[#111] py-4">
         <div className="container mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
           {[
             { label: 'Active Deals', value: '500+' },
@@ -160,7 +160,7 @@ export default function Home() {
       </section>
 
       {/* Popular Brands (Moves above Trending) */}
-      <section className="container mx-auto px-6 py-12 border-b border-neutral-200 dark:border-white/5 group/brands">
+      <section className="container mx-auto px-6 py-12 border-b border-[#111] group/brands">
         {brands.length > 0 && (
           <div className="overflow-hidden">
             <div className="flex justify-between items-center mb-6">
@@ -175,7 +175,7 @@ export default function Home() {
                   </button>
                   <button
                     onClick={() => brandsScrollRef.current?.scrollBy({ left: 200, behavior: 'smooth' })}
-                    className="p-2 rounded-full bg-black border border-white/5 hover:bg-white/10 text-white transition"
+                    className="p-2 rounded-full bg-black border border-[#111] hover:bg-[#111] text-white transition"
                   >
                     <ChevronRight size={20} className="text-neutral-600 dark:text-neutral-300" />
                   </button>
@@ -184,7 +184,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="relative w-full overflow-hidden group bg-white/5 rounded-3xl p-8 border border-white/5"
+            <div className="relative w-full overflow-hidden group bg-[#050505] rounded-3xl p-8 border border-[#111]"
               onMouseEnter={() => setIsBrandsPaused(true)}
               onMouseLeave={() => setIsBrandsPaused(false)}
             >
@@ -196,7 +196,7 @@ export default function Home() {
                   <div key={`${brand.id}-${idx}`} className="group/brand relative flex flex-col items-center space-y-3 min-w-[90px]">
                     <div className="relative">
                       <Link href={`/brand/${brand.id}`} className="block">
-                        <div className="w-20 h-20 bg-[#151515] rounded-2xl shadow-lg flex items-center justify-center border border-white/5 overflow-hidden group-hover/brand:border-[var(--color-primary)] group-hover/brand:shadow-[0_0_20px_rgba(var(--color-primary),0.3)] transition-all duration-500">
+                        <div className="w-20 h-20 bg-[#151515] rounded-2xl shadow-lg flex items-center justify-center border border-[#111] overflow-hidden group-hover/brand:border-[var(--color-primary)] group-hover/brand:shadow-[0_0_20px_rgba(var(--color-primary),0.3)] transition-all duration-500">
                           {brand.logo ? (
                             <img
                               src={brand.logo_url || `${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${brand.logo}`}
@@ -226,7 +226,7 @@ export default function Home() {
 
       {/* Scrolling Banners (Trending Promotions) */}
       {scrollingBanners.length > 0 && (
-        <section className="py-12 border-b border-neutral-200 dark:border-white/5 overflow-hidden group/trending">
+        <section className="py-12 border-b border-[#111] overflow-hidden group/trending">
           <div className="container mx-auto px-6 mb-6 flex items-center justify-between">
             <h2 className="text-xl font-medium text-neutral-800 dark:text-white/80">Trending Promotions</h2>
             <div className="flex gap-2 opacity-0 group-hover/trending:opacity-100 transition-opacity">
@@ -238,7 +238,7 @@ export default function Home() {
               </button>
               <button
                 onClick={() => document.getElementById('trending-scroll')?.scrollBy({ left: 300, behavior: 'smooth' })}
-                className="p-2 rounded-full bg-black border border-white/5 hover:bg-white/10 text-white transition"
+                className="p-2 rounded-full bg-black border border-[#111] hover:bg-[#111] text-white transition"
               >
                 <ChevronRight size={20} className="text-neutral-600 dark:text-neutral-300" />
               </button>
@@ -288,13 +288,13 @@ export default function Home() {
               <div className="hidden md:flex gap-2 opacity-0 group-hover/featured:opacity-100 transition-opacity">
                 <button
                   onClick={() => featuredScrollRef.current?.scrollBy({ left: -300, behavior: 'smooth' })}
-                  className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition"
+                  className="p-2 rounded-full bg-black border border-[#111] hover:bg-[#111] text-white transition"
                 >
                   <ChevronLeft size={24} />
                 </button>
                 <button
                   onClick={() => featuredScrollRef.current?.scrollBy({ left: 300, behavior: 'smooth' })}
-                  className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition"
+                  className="p-2 rounded-full bg-black border border-[#111] hover:bg-[#111] text-white transition"
                 >
                   <ChevronRight size={24} />
                 </button>
@@ -394,7 +394,7 @@ export default function Home() {
         {!offersData && !error && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="h-64 bg-white/5 rounded-2xl animate-pulse" />
+              <div key={i} className="h-64 bg-[#050505] rounded-2xl animate-pulse" />
             ))}
           </div>
         )}
@@ -440,7 +440,7 @@ export default function Home() {
 
 
       {/* Footer (Premium) */}
-      <footer className="bg-[#000000] border-t border-white/10 pt-20 pb-10">
+      <footer className="bg-[#000000] border-t border-[#111] pt-20 pb-10">
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
             <div className="col-span-1 md:col-span-2 space-y-6">
@@ -457,7 +457,7 @@ export default function Home() {
                 <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white dark:bg-white/5 border border-neutral-200 dark:border-transparent flex items-center justify-center text-neutral-500 dark:text-neutral-400 hover:bg-[#1877F2] hover:text-white dark:hover:bg-[#1877F2] dark:hover:text-white transition-all">
                   <Facebook size={20} />
                 </a>
-                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white dark:bg-white/5 border border-neutral-200 dark:border-transparent flex items-center justify-center text-neutral-500 dark:text-neutral-400 hover:bg-[#E4405F] hover:text-white dark:hover:bg-[#E4405F] dark:hover:text-white transition-all">
+                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white dark:bg-[#050505] border border-neutral-200 dark:border-transparent flex items-center justify-center text-neutral-500 dark:text-neutral-400 hover:bg-[#E4405F] hover:text-white dark:hover:bg-[#E4405F] dark:hover:text-white transition-all">
                   <Instagram size={20} />
                 </a>
                 <a href="https://x.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white dark:bg-white/5 border border-neutral-200 dark:border-transparent flex items-center justify-center text-neutral-500 dark:text-neutral-400 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all">
@@ -491,7 +491,7 @@ export default function Home() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Email Address"
-                  className="w-full bg-white dark:bg-white/5 border border-neutral-200 dark:border-white/10 rounded-lg px-4 py-3 text-neutral-900 dark:text-white focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)] outline-none transition-all placeholder:text-neutral-400"
+                  className="w-full bg-white dark:bg-[#050505] border border-neutral-200 dark:border-[#111] rounded-lg px-4 py-3 text-neutral-900 dark:text-white focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)] outline-none transition-all placeholder:text-neutral-400"
                   required
                 />
                 <button
@@ -506,7 +506,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="border-t border-neutral-200 dark:border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-neutral-500">
+          <div className="border-t border-[#111] pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-neutral-500">
             <p>&copy; 2025 GetOffer Sri Lanka. All rights reserved.</p>
             <div className="flex space-x-6 mt-4 md:mt-0">
               <Link href="/privacy" className="hover:text-neutral-900 dark:hover:text-white transition">Privacy Policy</Link>
