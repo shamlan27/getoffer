@@ -265,7 +265,7 @@ export default function Home() {
               className="flex overflow-x-auto gap-8 md:gap-12 items-center no-scrollbar pb-4"
             >
               {marqueeBrands.map((brand: any, idx: number) => (
-                <Link key={`${brand.id}-${idx}`} href={`/brand/${brand.id}`} className="flex-shrink-0 group relative w-16 h-16 md:w-20 md:h-20 grayscale hover:grayscale-0 transition-all duration-500">
+                <Link key={`${brand.id}-${idx}`} href={`/brand/${brand.id}`} className="flex-shrink-0 group relative w-16 h-16 md:w-20 md:h-20 grayscale-0 md:grayscale md:hover:grayscale-0 transition-all duration-500">
                   <div className="absolute inset-0 bg-white/5 rounded-2xl rotate-3 group-hover:rotate-6 transition-transform group-hover:bg-[var(--color-secondary)]/20" />
                   <div className="relative w-full h-full bg-black rounded-xl border border-white/10 flex items-center justify-center p-2 group-hover:-translate-y-2 transition-transform">
                     {brand.logo ? (
