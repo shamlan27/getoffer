@@ -61,7 +61,7 @@ export default function HeroSlider({ banners }: { banners: Banner[] }) {
 
     return (
         <div
-            className="relative w-full h-[500px] md:h-[600px] bg-neutral-950 overflow-hidden flex items-center justify-center font-sans"
+            className="relative w-full h-[500px] md:h-[600px] bg-[var(--background)] overflow-hidden flex items-center justify-center font-sans"
             onMouseEnter={() => setIsAutoPlaying(false)}
             onMouseLeave={() => setIsAutoPlaying(true)}
         >

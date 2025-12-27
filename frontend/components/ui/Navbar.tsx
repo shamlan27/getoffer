@@ -1,15 +1,15 @@
+
+
 'use client';
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useAuth } from '@/context/AuthContext';
-import { User, LogOut, Menu, X, ShoppingBag, Bell, Search } from 'lucide-react';
+import { Menu, X, Bell, Phone } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import axios from '@/lib/axios';
 import GlobalSearch from './GlobalSearch';
 
 export default function Navbar() {
-    const { user, logout } = useAuth();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isSubscribeOpen, setIsSubscribeOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
@@ -21,11 +21,8 @@ export default function Navbar() {
         };
         window.addEventListener('scroll', handleScroll);
 
-        // Check local subscription state
         const subState = localStorage.getItem('isNewsletterSubscribed');
-        if (subState === 'true') {
-            setIsSubscribed(true);
-        }
+        if (subState === 'true') setIsSubscribed(true);
 
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
@@ -45,118 +42,105 @@ export default function Navbar() {
 
     return (
         <>
-            <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out ${scrolled ? 'bg-black/80 backdrop-blur-md py-3 shadow-[0_4px_30px_rgba(0,0,0,0.5)] border-b border-white/5' : 'bg-transparent py-6'}`}>
-                <div className="container mx-auto px-6 flex justify-between items-center text-white transition-colors">
-                    {/* Logo */}
-                    <Link href="/" className="flex items-center gap-2 z-50 group">
-                        <div className="relative w-10 h-10 flex items-center justify-center bg-white/5 rounded-full backdrop-blur-sm border border-white/5 group-hover:border-[var(--color-primary)]/50 transition-colors">
-                            <Image src="/logo.png" alt="GetOffer Logo" width={28} height={28} className="object-contain" priority />
-                        </div>
-                        <span className="text-2xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-neutral-400 group-hover:to-white transition-all">
-                            GetOffer<span className="text-[var(--color-secondary)]">.lk</span>
-                        </span>
-                    </Link>
-
-                    {/* Desktop Nav */}
-                    <nav className="hidden md:flex items-center space-x-1 bg-white/5 backdrop-blur-md rounded-full px-1.5 py-1.5 border border-white/5 shadow-2xl hover:border-white/10 transition-colors">
-                        {['Home', 'Offers', 'Brands', 'Categories'].map((item) => (
-                            <Link
-                                key={item}
-                                href={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
-                                className="relative px-6 py-2 rounded-full text-sm font-medium text-neutral-300 hover:text-white hover:bg-white/5 transition-all group/navitem overflow-hidden"
-                            >
-                                <span className="relative z-10">{item}</span>
-                                {item === 'Home' && <div className="absolute inset-0 bg-white/5 rounded-full opacity-0" />}
-                            </Link>
-                        ))}
-                    </nav>
-
-                    {/* Right Actions */}
-                    <div className="hidden md:flex items-center gap-2">
-                        <GlobalSearch />
-                        <div className="h-6 w-[1px] bg-white/10 mx-2" />
-
-
-
-                        <Link href="/contact" className="text-sm text-neutral-400 hover:text-white transition mr-4">Contact</Link>
-
-                        {user ? (
-                            <div className="flex items-center space-x-3">
-                                <Link href="/dashboard" className="flex items-center gap-2 text-sm font-medium text-neutral-300 hover:text-white transition">
-                                    <div className="w-8 h-8 rounded-full bg-black flex items-center justify-center border border-[#111]">
-                                        <User size={14} />
-                                    </div>
-                                    <span>{user.name.split(' ')[0]}</span>
-                                </Link>
+            <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'py-4' : 'py-6'}`}>
+                <div className={`container mx-auto px-4 md:px-6 transition-all duration-500 rounded-3xl ${scrolled ? 'bg-[#000000]/80 backdrop-blur-xl border border-white/5 shadow-2xl max-w-6xl' : ''}`}>
+                    <div className="flex justify-between items-center h-14 md:h-16">
+                        {/* Logo */}
+                        <Link href="/" className="flex items-center gap-3 z-50 group">
+                            <div className="relative w-10 h-10 flex items-center justify-center bg-white/5 rounded-xl border border-white/10 group-hover:border-[var(--color-primary)]/50 group-hover:shadow-[0_0_20px_rgba(15,76,129,0.3)] transition-all duration-500">
+                                <Image src="/logo.png" alt="GetOffer" width={24} height={24} className="object-contain" priority />
                             </div>
-                        ) : (
-                            isSubscribed ? (
+                            <span className="text-xl md:text-2xl font-bold tracking-tight text-white group-hover:text-glow transition-all">
+                                GetOffer<span className="text-[var(--color-secondary)]">.lk</span>
+                            </span>
+                        </Link>
+
+                        {/* Desktop Nav */}
+                        <nav className="hidden md:flex items-center bg-white/5 backdrop-blur-md rounded-full p-1.5 border border-white/5 shadow-lg">
+                            {['Home', 'Offers', 'Brands', 'Categories'].map((item) => (
+                                <Link
+                                    key={item}
+                                    href={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
+                                    className="px-6 py-2 rounded-full text-sm font-medium text-neutral-400 hover:text-white hover:bg-white/10 transition-all relative group overflow-hidden"
+                                >
+                                    <span className="relative z-10">{item}</span>
+                                </Link>
+                            ))}
+                        </nav>
+
+                        {/* Actions */}
+                        <div className="hidden md:flex items-center gap-4">
+                            <GlobalSearch />
+
+                            <div className="h-6 w-[1px] bg-white/10" />
+
+                            <Link href="/contact" className="p-2 rounded-full text-neutral-400 hover:text-white hover:bg-white/5 transition-all">
+                                <Phone size={20} />
+                            </Link>
+
+                            {isSubscribed ? (
                                 <button
                                     onClick={handleUnsubscribe}
-                                    className="px-6 py-2.5 rounded-full bg-black text-neutral-300 border border-[#111] text-sm font-bold hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/50 transition-all shadow-[0_0_20px_rgba(0,0,0,0.3)] flex items-center gap-2"
+                                    className="px-5 py-2 rounded-full bg-black border border-white/10 text-neutral-400 text-sm font-bold hover:text-red-400 hover:border-red-500/50 transition-all flex items-center gap-2"
                                 >
-                                    <Bell size={16} className="fill-current" />
-                                    Unsubscribe
+                                    <Bell size={16} />
+                                    <span>Alerts Active</span>
                                 </button>
                             ) : (
                                 <button
                                     onClick={() => setIsSubscribeOpen(true)}
-                                    className="px-6 py-2.5 rounded-full bg-white text-black text-sm font-bold hover:bg-neutral-200 transition-colors shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.5)] flex items-center gap-2"
+                                    className="px-6 py-2 rounded-full bg-[var(--color-primary)] text-white text-sm font-bold shadow-[0_0_20px_rgba(15,76,129,0.4)] hover:shadow-[0_0_30px_rgba(15,76,129,0.6)] hover:scale-105 transition-all flex items-center gap-2"
                                 >
                                     <Bell size={16} className="fill-current" />
-                                    Subscribe
+                                    <span>Subscribe</span>
                                 </button>
-                            )
-                        )}
-                    </div>
-
-                    {/* Mobile Menu Button */}
-                    <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="md:hidden z-50 text-white p-2">
-                        {isMenuOpen ? <X /> : <Menu />}
-                    </button>
-
-                    {/* Mobile Nav Overlay */}
-                    {isMenuOpen && (
-                        <div className="fixed inset-0 bg-[#000000] z-40 flex flex-col items-center justify-center space-y-8 animate-in fade-in zoom-in duration-300">
-                            <Link href="/" onClick={() => setIsMenuOpen(false)} className="text-2xl font-bold text-white">Home</Link>
-                            <Link href="/offers" onClick={() => setIsMenuOpen(false)} className="text-2xl font-bold text-neutral-400 hover:text-white">Offers</Link>
-                            <Link href="/brands" onClick={() => setIsMenuOpen(false)} className="text-2xl font-bold text-neutral-400 hover:text-white">Brands</Link>
-                            <Link href="/categories" onClick={() => setIsMenuOpen(false)} className="text-2xl font-bold text-neutral-400 hover:text-white">Categories</Link>
-
-                            <div className="w-16 h-[1px] bg-[#111] my-4" />
-
-
-                            {/* Search Trigger for Mobile - Simplified to just toggle search visibility or distinct mobile search */}
-                            <div className="block md:hidden">
-                                <GlobalSearch />
-                            </div>
-
-
-                            {user ? (
-                                <button onClick={() => { logout(); setIsMenuOpen(false); }} className="text-red-500 text-lg font-medium mt-4">Log Out</button>
-                            ) : (
-                                isSubscribed ? (
-                                    <button onClick={() => { setIsMenuOpen(false); handleUnsubscribe(); }} className="px-8 py-3 rounded-full bg-black text-red-400 border border-[#111] font-bold text-lg">
-                                        Unsubscribe
-                                    </button>
-                                ) : (
-                                    <button onClick={() => { setIsMenuOpen(false); setIsSubscribeOpen(true); }} className="px-8 py-3 rounded-full bg-[var(--color-primary)] text-white font-bold text-lg flex items-center gap-2">
-                                        <Bell size={18} />
-                                        Subscribe
-                                    </button>
-                                )
                             )}
                         </div>
-                    )}
-                </div>
-            </header >
 
-            {/* Subscribe Modal */}
-            {
-                isSubscribeOpen && (
-                    <SubscribeModal onClose={() => setIsSubscribeOpen(false)} onSuccess={handleSubscribeSuccess} />
-                )
-            }
+                        {/* Mobile Toggle */}
+                        <button
+                            onClick={() => setIsMenuOpen(!isMenuOpen)}
+                            className="md:hidden z-50 p-2 text-white bg-white/5 rounded-full border border-white/5 backdrop-blur-sm"
+                        >
+                            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                        </button>
+                    </div>
+                </div>
+
+                {/* Mobile Menu Overlay */}
+                {isMenuOpen && (
+                    <div className="fixed inset-0 bg-black/95 backdrop-blur-3xl z-40 flex flex-col items-center justify-center space-y-8 animate-fade-in-up">
+                        <div className="flex flex-col items-center space-y-6">
+                            {['Home', 'Offers', 'Brands', 'Categories'].map((item) => (
+                                <Link
+                                    key={item}
+                                    href={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
+                                    onClick={() => setIsMenuOpen(false)}
+                                    className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-b from-white to-neutral-500 hover:to-white transition-all"
+                                >
+                                    {item}
+                                </Link>
+                            ))}
+                        </div>
+
+                        <div className="w-16 h-[1px] bg-white/10" />
+
+                        <div className="flex flex-col items-center gap-6">
+                            <Link href="/contact" onClick={() => setIsMenuOpen(false)} className="text-xl text-neutral-400">Contact Support</Link>
+                            <button
+                                onClick={() => { setIsMenuOpen(false); setIsSubscribeOpen(true); }}
+                                className="px-8 py-3 rounded-2xl bg-[var(--color-primary)] text-white font-bold text-lg shadow-[0_0_30px_rgba(15,76,129,0.5)]"
+                            >
+                                Enable Alerts
+                            </button>
+                        </div>
+                    </div>
+                )}
+            </header>
+
+            {isSubscribeOpen && (
+                <SubscribeModal onClose={() => setIsSubscribeOpen(false)} onSuccess={handleSubscribeSuccess} />
+            )}
         </>
     );
 }

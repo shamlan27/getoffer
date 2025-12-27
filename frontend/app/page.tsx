@@ -8,49 +8,10 @@ import useSWR from 'swr';
 import axios from '@/lib/axios';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { useState, useEffect, useRef } from 'react';
-import { Facebook, Instagram, Twitter, Linkedin, Youtube, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useState } from 'react';
+import { Facebook, Instagram, Twitter, Linkedin, Youtube, ArrowRight, TrendingUp, Grid, Tag } from 'lucide-react';
 
 const fetcher = (url: string) => axios.get(url).then(res => res.data);
-
-// Helper for auto-scrolling
-const useAutoScroll = (ref: any, isPaused: boolean) => {
-  const animationRef = useRef<number | null>(null);
-  // We use a ref to track precise scroll position to allow for sub-pixel scrolling speeds (e.g. 0.5px/frame)
-  // However, since scrollLeft is integer-based in most browsers, we just add a small amount each frame
-  // and rely on the high framerate for smoothness.
-
-  useEffect(() => {
-    const scrollContainer = ref.current;
-    if (!scrollContainer) return;
-
-    const animate = () => {
-      if (!scrollContainer) return;
-
-      // Move 1px every frame (approx 60px/sec at 60fps)
-      // If this is too fast, we can use an accumulator.
-      // Let's try 0.5 speed essentially by running every other frame or using accumulator.
-      // Simple smooth scroll:
-      if (scrollContainer.scrollLeft + scrollContainer.clientWidth >= scrollContainer.scrollWidth - 1) {
-        scrollContainer.scrollTo({ left: 0, behavior: 'auto' });
-      } else {
-        scrollContainer.scrollLeft += 1;
-      }
-
-      animationRef.current = requestAnimationFrame(animate);
-    };
-
-    if (!isPaused) {
-      animationRef.current = requestAnimationFrame(animate);
-    } else {
-      if (animationRef.current !== null) cancelAnimationFrame(animationRef.current);
-    }
-
-    return () => {
-      if (animationRef.current !== null) cancelAnimationFrame(animationRef.current);
-    };
-  }, [isPaused, ref]);
-};
 
 export default function Home() {
   const searchParams = useSearchParams();
@@ -58,19 +19,9 @@ export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [email, setEmail] = useState('');
   const [subStatus, setSubStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
-  const [isTrendingPaused, setIsTrendingPaused] = useState(false);
-  const trendingScrollRef = useRef<HTMLDivElement>(null);
+  const [message, setMessage] = useState('');
 
-  const [isFeaturedPaused, setIsFeaturedPaused] = useState(false);
-  const featuredScrollRef = useRef<HTMLDivElement>(null);
-
-  const [isBrandsPaused, setIsBrandsPaused] = useState(false);
-  const brandsScrollRef = useRef<HTMLDivElement>(null);
-
-  useAutoScroll(trendingScrollRef, isTrendingPaused);
-  useAutoScroll(featuredScrollRef, isFeaturedPaused);
-  useAutoScroll(brandsScrollRef, isBrandsPaused);
-
+  // API URLs
   const getOffersApiUrl = (isFeatured = false) => {
     const params = new URLSearchParams();
     if (search) params.append('search', search);
@@ -83,15 +34,7 @@ export default function Home() {
   const { data: categoriesData } = useSWR('/api/categories', fetcher);
   const { data: featuredOffersData } = useSWR(getOffersApiUrl(true), fetcher);
   const { data: bannersData } = useSWR('/api/banners', fetcher);
-
-  // Fetch brands filtered by category
-  const getBrandsApiUrl = () => {
-    const params = new URLSearchParams();
-    if (selectedCategory) params.append('category', selectedCategory);
-    if (search) params.append('search', search);
-    return `/api/brands?${params.toString()}`;
-  };
-  const { data: brandsData } = useSWR(getBrandsApiUrl(), fetcher);
+  const { data: brandsData } = useSWR('/api/brands', fetcher);
 
   const featuredOffers = featuredOffersData?.data || [];
   const banners = bannersData?.data || [];
@@ -99,26 +42,7 @@ export default function Home() {
   const categories = categoriesData || [];
   const brands = brandsData || [];
 
-  /* Marquee Helpers */
-  const shouldAnimateBrands = brands.length > 6;
-  const marqueeBrands = shouldAnimateBrands
-    ? [...brands, ...brands]
-    : brands;
-
-  const shouldAnimateFeatured = featuredOffers.length > 4;
-  const marqueeOffers = shouldAnimateFeatured
-    ? [...featuredOffers, ...featuredOffers]
-    : featuredOffers;
-
-  const scrollingBanners = banners.filter((b: any) => !b.type || b.type === 'scrolling');
-  const heroBanners = banners.filter((b: any) => b.type === 'standard');
-
-  const shouldAnimateBanners = scrollingBanners.length > 3;
-  const marqueeBanners = shouldAnimateBanners
-    ? [...scrollingBanners, ...scrollingBanners]
-    : scrollingBanners;
-
-  const [message, setMessage] = useState('');
+  const heroBanners = banners.filter((b: any) => b.type === 'standard' || !b.type);
 
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -130,209 +54,105 @@ export default function Home() {
       setEmail('');
     } catch (err: any) {
       setSubStatus('error');
-      setMessage(err.response?.data?.message || 'Failed to subscribe. Please try again.');
+      setMessage(err.response?.data?.message || 'Failed to subscribe.');
     }
   };
 
   return (
-    <main className="min-h-screen bg-[#000000] text-white">
-      {heroBanners.length > 0 ? (
-        <HeroSlider banners={heroBanners} />
-      ) : (
-        <Hero />
-      )}
+    <main className="min-h-screen bg-[var(--background)] text-white font-sans selection:bg-[var(--color-primary)] selection:text-white">
 
-      {/* Stats Bar */}
-      <section className="bg-[#000000] border-y border-[#111] py-4">
-        <div className="container mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-          {[
-            { label: 'Active Deals', value: '500+' },
-            { label: 'Verified Brands', value: '100+' },
-            { label: 'Daily Updates', value: '24/7' },
-            { label: 'Users Saving', value: '10k+' }
-          ].map((stat, i) => (
-            <div key={i} className="flex flex-col">
-              <span className="text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-blue-500 dark:from-white dark:to-neutral-400">{stat.value}</span>
-              <span className="text-xs md:text-sm text-neutral-600 dark:text-neutral-500 uppercase tracking-wider">{stat.label}</span>
-            </div>
-          ))}
+      {/* Hero Section */}
+      {heroBanners.length > 0 ? <HeroSlider banners={heroBanners} /> : <Hero />}
+
+      {/* Stats Ticker (Glass) */}
+      <div className="border-y border-white/5 bg-white/[0.02] backdrop-blur-sm -mt-px relative z-20">
+        <div className="container mx-auto px-4 py-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center divide-x divide-white/5">
+            {[
+              { label: 'Live Deals', value: '500+' },
+              { label: 'Partner Brands', value: '100+' },
+              { label: 'Verified Codes', value: 'Active' },
+              { label: 'Users Saving', value: '50k+' }
+            ].map((stat, i) => (
+              <div key={i} className="flex flex-col items-center">
+                <span className="text-xl font-bold text-white tracking-tight">{stat.value}</span>
+                <span className="text-xs font-medium text-neutral-500 uppercase tracking-widest mt-1">{stat.label}</span>
+              </div>
+            ))}
+          </div>
         </div>
-      </section>
+      </div>
 
-      {/* Popular Brands (Moves above Trending) */}
-      <section className="container mx-auto px-6 py-12 border-b border-[#111] group/brands">
-        {brands.length > 0 && (
-          <div className="overflow-hidden">
-            <div className="flex justify-between items-center mb-8">
-              <div className="flex items-center gap-3">
-                <div className="w-1.5 h-8 bg-[var(--color-primary)] rounded-full shadow-[0_0_10px_var(--color-primary)]" />
-                <h2 className="text-3xl font-bold text-white tracking-tight">Popular Brands</h2>
+      <div className="container mx-auto px-4 py-16 space-y-24">
+
+        {/* SECTION 1: Categories (Bento Grid) */}
+        <section>
+          <div className="flex items-center gap-3 mb-8">
+            <Grid className="text-[var(--color-primary)]" />
+            <h2 className="text-3xl font-bold tracking-tight">Explore Categories</h2>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            {/* "All" Block */}
+            <button
+              onClick={() => setSelectedCategory('')}
+              className={`col-span-2 md:col-span-2 p-6 rounded-3xl border border-white/10 flex flex-col justify-between transition-all duration-300 group
+                  ${selectedCategory === '' ? 'bg-[var(--color-primary)] shadow-[0_0_30px_rgba(15,76,129,0.3)]' : 'bg-[var(--surface-100)] hover:bg-[var(--surface-200)]'}
+                `}
+            >
+              <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center mb-4">
+                <Grid size={20} className="text-white" />
               </div>
-              <div className="flex items-center gap-4">
-                <div className="hidden md:flex gap-2 opacity-0 group-hover/brands:opacity-100 transition-opacity">
-                  <button
-                    onClick={() => brandsScrollRef.current?.scrollBy({ left: -200, behavior: 'smooth' })}
-                    className="p-2 rounded-full bg-black border border-[#111] hover:bg-[#111] text-white transition"
-                  >
-                    <ChevronLeft size={20} className="text-neutral-600 dark:text-neutral-300" />
-                  </button>
-                  <button
-                    onClick={() => brandsScrollRef.current?.scrollBy({ left: 200, behavior: 'smooth' })}
-                    className="p-2 rounded-full bg-black border border-[#111] hover:bg-[#111] text-white transition"
-                  >
-                    <ChevronRight size={20} className="text-neutral-600 dark:text-neutral-300" />
-                  </button>
+              <div>
+                <span className="text-2xl font-bold text-white block">All Offers</span>
+                <span className="text-sm text-white/60">View everything</span>
+              </div>
+            </button>
+
+            {/* Category Blocks */}
+            {categories.slice(0, 10).map((cat: any) => (
+              <button
+                key={cat.id}
+                onClick={() => setSelectedCategory(cat.slug)}
+                className={`col-span-1 p-4 rounded-3xl border border-white/5 flex flex-col items-center justify-center gap-3 transition-all hover:scale-105
+                    ${selectedCategory === cat.slug ? 'bg-white/10 border-white/20' : 'bg-[var(--surface-100)] hover:bg-[var(--surface-200)]'}
+                  `}
+              >
+                <div className="w-12 h-12 relative flex items-center justify-center">
+                  {cat.icon && (cat.icon.startsWith('http') || cat.icon.startsWith('/')) ? (
+                    <img src={cat.icon} className="w-8 h-8 object-contain opacity-80" alt="" />
+                  ) : (
+                    <span className="text-2xl">{cat.icon || '#'}</span>
+                  )}
                 </div>
-                <Link href="/brands" className="text-sm text-neutral-400 hover:text-white transition-colors">View All Brands</Link>
-              </div>
-            </div>
-
-            <div className="relative w-full overflow-hidden group bg-[#050505] rounded-3xl p-8 border border-[#111]"
-              onMouseEnter={() => setIsBrandsPaused(true)}
-              onMouseLeave={() => setIsBrandsPaused(false)}
-            >
-              <div
-                ref={brandsScrollRef}
-                className="flex space-x-12 overflow-x-auto no-scrollbar scroll-smooth items-center"
-              >
-                {marqueeBrands.map((brand: any, idx: number) => (
-                  <div key={`${brand.id}-${idx}`} className="group/brand relative flex flex-col items-center space-y-3 min-w-[90px]">
-                    <div className="relative">
-                      <Link href={`/brand/${brand.id}`} className="block">
-                        <div className="w-20 h-20 bg-[#151515] rounded-2xl shadow-lg flex items-center justify-center border border-[#111] overflow-hidden group-hover/brand:border-[var(--color-primary)] group-hover/brand:shadow-[0_0_20px_rgba(var(--color-primary),0.3)] transition-all duration-500">
-                          {brand.logo ? (
-                            <img
-                              src={brand.logo_url || `${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${brand.logo}`}
-                              alt={brand.name}
-                              className="w-[80%] h-[80%] object-contain transition-all duration-500"
-                            />
-                          ) : (
-                            <span className="text-2xl font-bold text-neutral-600 group-hover/brand:text-white">{brand.name.charAt(0)}</span>
-                          )}
-                        </div>
-                      </Link>
-                      <div className="absolute -top-2 -right-2 opacity-0 group-hover/brand:opacity-100 transition-opacity duration-300 z-10">
-                        <SubscribeToggle id={brand.id} type="brand" className="shadow-lg bg-black border border-[#111] w-8 h-8 flex items-center justify-center !p-0 hover:bg-[var(--color-primary)]" />
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Fades for marquee */}
-              <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[#111] to-transparent pointer-events-none" />
-              <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-[#111] to-transparent pointer-events-none" />
-            </div>
-          </div>
-        )}
-      </section>
-
-      {/* Scrolling Banners (Trending Promotions) */}
-      {scrollingBanners.length > 0 && (
-        <section className="py-12 border-b border-[#111] overflow-hidden group/trending">
-          <div className="container mx-auto px-6 mb-8 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-1.5 h-8 bg-gradient-to-b from-purple-500 to-pink-500 rounded-full shadow-[0_0_10px_purple]" />
-              <h2 className="text-2xl font-bold text-white tracking-tight">Trending Promotions</h2>
-            </div>
-            <div className="flex gap-2 opacity-0 group-hover/trending:opacity-100 transition-opacity">
-              <button
-                onClick={() => document.getElementById('trending-scroll')?.scrollBy({ left: -300, behavior: 'smooth' })}
-                className="p-2 rounded-full bg-black border border-[#111] hover:bg-[#111] text-white transition"
-              >
-                <ChevronLeft size={20} className="text-neutral-600 dark:text-neutral-300" />
+                <span className="font-medium text-sm text-center line-clamp-1">{cat.name}</span>
               </button>
-              <button
-                onClick={() => document.getElementById('trending-scroll')?.scrollBy({ left: 300, behavior: 'smooth' })}
-                className="p-2 rounded-full bg-black border border-[#111] hover:bg-[#111] text-white transition"
-              >
-                <ChevronRight size={20} className="text-neutral-600 dark:text-neutral-300" />
-              </button>
-            </div>
-          </div>
-          <div className="relative w-full"
-            onMouseEnter={() => setIsTrendingPaused(true)}
-            onMouseLeave={() => setIsTrendingPaused(false)}
-          >
-            <div
-              id="trending-scroll"
-              ref={trendingScrollRef}
-              className="flex space-x-6 px-4 overflow-x-auto no-scrollbar scroll-smooth pb-4"
-            >
-              {marqueeBanners.map((banner: any, idx: number) => (
-                <a
-                  key={`${banner.id}-${idx}`}
-                  href={banner.link || '#'}
-                  target={banner.link ? "_blank" : "_self"}
-                  className="block relative w-[300px] h-[160px] md:w-[400px] md:h-[200px] flex-shrink-0 rounded-2xl overflow-hidden glass-card transition-transform hover:scale-[1.02] group"
-                >
-                  <img
-                    src={banner.image_url || `${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${banner.image_path}`}
-                    alt={banner.title || 'Banner'}
-                    className="w-full h-full object-cover opacity-100 md:opacity-90 dark:md:opacity-80 group-hover:opacity-100 transition-opacity"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent md:from-black/90 md:to-transparent flex items-end p-4 opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity">
-                    <span className="text-white font-medium truncate">{banner.title}</span>
-                  </div>
-                </a>
-              ))}
-            </div>
+            ))}
           </div>
         </section>
-      )}
 
-      {/* Featured Offers Marquee */}
-      {featuredOffers.length > 0 && (
-        <section className="py-16 relative bg-[#000000] group/featured">
-
-          <div className="container mx-auto px-6 mb-8 relative z-10 flex justify-between items-end">
-            <div>
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-1.5 h-8 bg-[var(--color-secondary)] rounded-full shadow-[0_0_10px_var(--color-secondary)]" />
-                <h2 className="text-3xl font-bold text-white tracking-tight">Featured Offers</h2>
+        {/* SECTION 2: Featured Spotlight (Horizontal Scroll but Premium) */}
+        {featuredOffers.length > 0 && (
+          <section>
+            <div className="flex items-center justify-between mb-8">
+              <div className="flex items-center gap-3">
+                <TrendingUp className="text-[var(--color-secondary)]" />
+                <h2 className="text-3xl font-bold tracking-tight">Featured Selections</h2>
               </div>
-              <p className="text-neutral-400 pl-4 border-l border-[#222] ml-1">Hand-picked deals you shouldn't miss</p>
+              <Link href="/offers" className="px-4 py-2 rounded-full border border-white/10 text-sm hover:bg-white hover:text-black transition-all">View All</Link>
             </div>
-            <div className="flex items-center gap-4">
-              <div className="hidden md:flex gap-2 opacity-0 group-hover/featured:opacity-100 transition-opacity">
-                <button
-                  onClick={() => featuredScrollRef.current?.scrollBy({ left: -300, behavior: 'smooth' })}
-                  className="p-2 rounded-full bg-black border border-[#111] hover:bg-[#111] text-white transition"
-                >
-                  <ChevronLeft size={24} />
-                </button>
-                <button
-                  onClick={() => featuredScrollRef.current?.scrollBy({ left: 300, behavior: 'smooth' })}
-                  className="p-2 rounded-full bg-black border border-[#111] hover:bg-[#111] text-white transition"
-                >
-                  <ChevronRight size={24} />
-                </button>
-              </div>
-              <Link href="/offers" className="text-[var(--color-primary)] font-semibold hover:text-inherit transition-colors flex items-center gap-2">
-                View All <span className="text-lg">→</span>
-              </Link>
-            </div>
-          </div>
 
-          <div className="relative w-full z-10"
-            onMouseEnter={() => setIsFeaturedPaused(true)}
-            onMouseLeave={() => setIsFeaturedPaused(false)}
-          >
-            <div
-              id="featured-scroll"
-              ref={featuredScrollRef}
-              className="flex space-x-6 px-4 overflow-x-auto no-scrollbar scroll-smooth pb-4"
-            >
-              {featuredOffers.map((offer: any, idx: number) => (
-                <div key={`${offer.id}-${idx}`} className="w-[300px] flex-shrink-0">
-                  <Link href={`/offer/${offer.id}`} className="block transform hover:-translate-y-2 transition duration-500">
+            <div className="flex overflow-x-auto gap-6 pb-8 no-scrollbar snap-x">
+              {featuredOffers.map((offer: any) => (
+                <div key={offer.id} className="min-w-[300px] md:min-w-[400px] snap-center">
+                  <Link href={`/offer/${offer.id}`} className="block h-full">
                     <OfferCard
-                      brand={offer.brand?.name || 'Unknown'}
-                      logo={offer.brand?.logo_url || (offer.brand?.logo ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${offer.brand.logo}` : undefined)}
-                      image={offer.how_to_claim_image_url || (offer.how_to_claim_image ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${offer.how_to_claim_image}` : undefined)}
+                      brand={offer.brand?.name}
                       description={offer.title}
                       code={offer.code}
-                      expiry={offer.valid_to ? new Date(offer.valid_to).toLocaleDateString() : 'No expiry'}
+                      expiry={offer.valid_to}
+                      image={offer.how_to_claim_image_url || `${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${offer.how_to_claim_image}`}
+                      logo={offer.brand?.logo_url || `${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${offer.brand?.logo}`}
                       verified={true}
                       variant="featured"
                     />
@@ -340,197 +160,129 @@ export default function Home() {
                 </div>
               ))}
             </div>
+          </section>
+        )}
+
+        {/* SECTION 3: Latest Deals (Feed Layout) */}
+        <section>
+          <div className="flex items-center gap-3 mb-8">
+            <Tag className="text-green-500" />
+            <h2 className="text-3xl font-bold tracking-tight">Latest Drops</h2>
+          </div>
+
+          {!offersData && !error && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[1, 2, 3, 4, 5, 6].map(i => <div key={i} className="h-64 bg-white/5 rounded-3xl animate-pulse" />)}
+            </div>
+          )}
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {offers.map((offer: any) => (
+              <Link key={offer.id} href={`/offer/${offer.id}`} className="block h-full group">
+                <OfferCard
+                  brand={offer.brand?.name}
+                  description={offer.title}
+                  code={offer.code}
+                  expiry={offer.valid_to}
+                  image={offer.how_to_claim_image_url || `${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${offer.how_to_claim_image}`}
+                  logo={offer.brand?.logo_url || `${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${offer.brand?.logo}`}
+                  verified={true}
+                />
+              </Link>
+            ))}
+          </div>
+
+          <div className="mt-16 text-center">
+            <Link href="/offers" className="inline-flex items-center gap-2 px-8 py-4 bg-white text-black rounded-full font-bold text-lg hover:bg-[var(--color-primary)] hover:text-white transition-all duration-300 shadow-[0_0_30px_rgba(255,255,255,0.2)] hover:shadow-[0_0_40px_rgba(15,76,129,0.4)]">
+              Load More Deals <ArrowRight size={20} />
+            </Link>
           </div>
         </section>
-      )}
 
-      {/* Main Content Area: Sidebar + Grid layout for desktop could go here, keeping simple sections for now as per design */}
+        {/* SECTION 4: Brand Wall (Simple Grid) */}
+        {brands.length > 0 && (
+          <section className="bg-white/5 rounded-[2rem] p-8 md:p-12 border border-white/5">
+            <div className="text-center mb-10">
+              <h2 className="text-2xl font-bold mb-2">Trusted by Top Brands</h2>
+              <p className="text-neutral-400">Join thousands of brands saving you money.</p>
+            </div>
 
-      <section className="container mx-auto px-6 py-12" id="categories">
-        {/* Categories Pills (Enhanced) */}
-        <div className="mb-12">
-          <div className="flex items-center gap-3 mb-8">
-            <div className="w-1.5 h-8 bg-green-500 rounded-full shadow-[0_0_10px_green]" />
-            <h2 className="text-3xl font-bold text-white tracking-tight">Browse by Category</h2>
-          </div>
-          <div className="flex overflow-x-auto pb-4 md:flex-wrap md:overflow-visible md:pb-0 gap-4 no-scrollbar -mx-6 px-6 md:mx-0 md:px-0 scroll-smooth">
-            <button
-              onClick={() => setSelectedCategory('')}
-              className={`flex-shrink-0 flex items-center space-x-2 px-5 py-2.5 rounded-full transition-all duration-300 font-medium ${selectedCategory === ''
-                ? 'bg-white text-black shadow-lg'
-                : 'bg-black text-neutral-300 hover:bg-[#111] border border-[#111]'
-                }`}
-            >
-              <span>All</span>
-            </button>
-            {categories.map((cat: any) => (
-              <div
-                key={cat.id}
-                className={`flex-shrink-0 group flex items-center pl-1 pr-3 py-1 rounded-full border transition-all duration-300 gap-2 ${selectedCategory === cat.slug
-                  ? 'bg-[var(--color-primary)]/10 border-[var(--color-primary)] text-[var(--color-primary)]'
-                  : 'bg-black border-[#111] text-neutral-300'
-                  }`}
-              >
-                <button
-                  onClick={() => setSelectedCategory(cat.slug)}
-                  className={`flex items-center gap-2 px-3 py-1.5 rounded-full ${selectedCategory === cat.slug ? 'text-[var(--color-primary)]' : 'group-hover:text-black dark:group-hover:text-white'} transition-colors whitespace-nowrap`}
-                >
-                  {cat.icon && (
-                    cat.icon.startsWith('http') || cat.icon.startsWith('/')
-                      ? <img src={cat.icon} alt="" className="w-5 h-5 object-contain" />
-                      : <span className="text-lg leading-none">{cat.icon}</span>
-                  )}
-                  <span>{cat.name}</span>
-                </button>
-                <SubscribeToggle
-                  id={cat.id}
-                  type="category"
-                  className={`w-6 h-6 flex items-center justify-center !p-0 ${selectedCategory === cat.slug ? 'text-[var(--color-primary)]' : 'text-neutral-400 hover:text-black dark:hover:text-white'}`}
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-
-
-
-        {/* Offers Grid */}
-        <div className="mb-8 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-1.5 h-8 bg-blue-500 rounded-full shadow-[0_0_10px_blue]" />
-            <h2 className="text-3xl font-bold text-white tracking-tight">Latest Deals</h2>
-          </div>
-          <Link href="/offers" className="px-4 py-2 border border-[#111] rounded-full text-sm font-medium hover:bg-white hover:text-black transition-all">
-            Browse All
-          </Link>
-        </div>
-
-        {/* Loading State */}
-        {!offersData && !error && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="h-64 bg-[#050505] rounded-2xl animate-pulse" />
-            ))}
-          </div>
-        )}
-
-        {/* Error State */}
-        {error && (
-          <div className="text-center py-20 bg-red-500/10 rounded-2xl border border-red-500/20">
-            <p className="text-red-400">Failed to load offers. Please try again later.</p>
-          </div>
-        )}
-
-        {/* Data State */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {offers.map((offer: any) => (
-            <Link key={offer.id} href={`/offer/${offer.id}`} className="block h-full transform hover:-translate-y-1 transition duration-300">
-              <OfferCard
-                brand={offer.brand?.name || 'Unknown Brand'}
-                logo={offer.brand?.logo_url || (offer.brand?.logo ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${offer.brand.logo}` : undefined)}
-                image={offer.how_to_claim_image_url || (offer.how_to_claim_image ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${offer.how_to_claim_image}` : undefined)}
-                description={offer.title}
-                code={offer.code}
-                expiry={offer.valid_to ? new Date(offer.valid_to).toLocaleDateString() : 'No expiry'}
-                verified={true}
-              />
-            </Link>
-          ))}
-        </div>
-
-        {/* Browse All Section */}
-        <div className="mt-12 flex justify-center">
-          <Link
-            href="/offers"
-            className="group relative px-8 py-3 rounded-full bg-[#050505] border border-[#111] text-white font-semibold hover:bg-[var(--color-primary)] hover:border-[var(--color-primary)] transition-all duration-300 flex items-center gap-2"
-          >
-            <span>Browse All Offers</span>
-            <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
-          </Link>
-        </div>
-
-
-      </section>
-
-
-
-      {/* Footer (Premium) */}
-      <footer className="bg-[#000000] border-t border-[#111] pt-20 pb-10">
-        <div className="container mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
-            <div className="col-span-1 md:col-span-2 space-y-6">
-              <Link href="/" className="flex items-center gap-2">
-                <img src="/logo.png" alt="GetOffer Logo" className="w-8 h-8 object-contain" />
-                <span className="text-3xl font-bold tracking-tight text-neutral-900 dark:text-white">
-                  GetOffer<span className="text-[var(--color-secondary)]">.lk</span>
-                </span>
+            <div className="flex flex-wrapjustify-center gap-8 md:gap-12 items-center justify-center opacity-70">
+              {brands.slice(0, 12).map((brand: any) => (
+                <Link key={brand.id} href={`/brand/${brand.id}`} className="group relative w-16 h-16 md:w-20 md:h-20 grayscale hover:grayscale-0 transition-all duration-500">
+                  <div className="absolute inset-0 bg-white/5 rounded-2xl rotate-3 group-hover:rotate-6 transition-transform group-hover:bg-[var(--color-secondary)]/20" />
+                  <div className="relative w-full h-full bg-black rounded-xl border border-white/10 flex items-center justify-center p-2 group-hover:-translate-y-2 transition-transform">
+                    {brand.logo ? (
+                      <img src={brand.logo_url || `${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${brand.logo}`} className="w-full h-full object-contain" alt={brand.name} />
+                    ) : (
+                      <span className="font-bold">{brand.name[0]}</span>
+                    )}
+                  </div>
+                </Link>
+              ))}
+              <Link href="/brands" className="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center rounded-xl border border-dashed border-white/20 text-neutral-400 hover:text-white hover:border-white transition-all">
+                <span className="text-sm font-medium">View All</span>
               </Link>
-              <p className="text-neutral-600 dark:text-neutral-400 max-w-md leading-relaxed">
-                Sri Lanka's premier destination for exclusive discounts, coupons, and brand promotions. Join the community of smart shoppers today.
-              </p>
-              <div className="flex space-x-4">
-                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white dark:bg-white/5 border border-neutral-200 dark:border-transparent flex items-center justify-center text-neutral-500 dark:text-neutral-400 hover:bg-[#1877F2] hover:text-white dark:hover:bg-[#1877F2] dark:hover:text-white transition-all">
-                  <Facebook size={20} />
-                </a>
-                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white dark:bg-[#050505] border border-neutral-200 dark:border-transparent flex items-center justify-center text-neutral-500 dark:text-neutral-400 hover:bg-[#E4405F] hover:text-white dark:hover:bg-[#E4405F] dark:hover:text-white transition-all">
-                  <Instagram size={20} />
-                </a>
-                <a href="https://x.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white dark:bg-white/5 border border-neutral-200 dark:border-transparent flex items-center justify-center text-neutral-500 dark:text-neutral-400 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all">
-                  <Twitter size={20} />
-                </a>
-                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white dark:bg-white/5 border border-neutral-200 dark:border-transparent flex items-center justify-center text-neutral-500 dark:text-neutral-400 hover:bg-[#0077B5] hover:text-white dark:hover:bg-[#0077B5] dark:hover:text-white transition-all">
-                  <Linkedin size={20} />
-                </a>
-                <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white dark:bg-white/5 border border-neutral-200 dark:border-transparent flex items-center justify-center text-neutral-500 dark:text-neutral-400 hover:bg-[#FF0000] hover:text-white dark:hover:bg-[#FF0000] dark:hover:text-white transition-all">
-                  <Youtube size={20} />
-                </a>
-              </div>
             </div>
+          </section>
+        )}
 
-            <div>
-              <h4 className="text-neutral-900 dark:text-white font-bold mb-6">Quick Links</h4>
-              <ul className="space-y-4 text-sm text-neutral-600 dark:text-neutral-400">
-                <li><Link href="/offers" className="hover:text-[var(--color-primary)] transition">Browse Offers</Link></li>
-                <li><Link href="/brands" className="hover:text-[var(--color-primary)] transition">Our Partner Brands</Link></li>
-                <li><Link href="/about" className="hover:text-[var(--color-primary)] transition">About GetOffer</Link></li>
-                <li><Link href="/contact" className="hover:text-[var(--color-primary)] transition">Contact Support</Link></li>
-              </ul>
-            </div>
+        {/* SECTION 5: Newsletter */}
+        <section className="relative overflow-hidden rounded-[2.5rem] bg-[var(--color-primary)] px-6 py-20 text-center">
+          <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10 mix-blend-overlay" />
+          <div className="absolute inset-0 bg-gradient-to-br from-black/20 to-transparent" />
 
-            <div>
-              <h4 className="text-neutral-900 dark:text-white font-bold mb-6">Stay Updated</h4>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">Get the latest offers delivered to your inbox.</p>
-              <form onSubmit={handleSubscribe} className="relative">
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Email Address"
-                  className="w-full bg-white dark:bg-[#050505] border border-neutral-200 dark:border-[#111] rounded-lg px-4 py-3 text-neutral-900 dark:text-white focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)] outline-none transition-all placeholder:text-neutral-400"
-                  required
-                />
-                <button
-                  disabled={subStatus === 'loading'}
-                  className="absolute right-1 top-1 bottom-1 bg-[var(--color-primary)] text-white px-4 rounded-md font-bold text-sm hover:opacity-90 transition disabled:opacity-50"
-                >
-                  {subStatus === 'loading' ? '...' : 'Join'}
-                </button>
-              </form>
-              {subStatus === 'success' && <p className="text-green-500 text-xs mt-2">Subscribed successfully!</p>}
-              {subStatus === 'error' && <p className="text-red-500 text-xs mt-2">{message}</p>}
-            </div>
+          <div className="relative z-10 max-w-2xl mx-auto space-y-8">
+            <h2 className="text-4xl md:text-5xl font-black text-white tracking-tight leading-tight">
+              Never Pay Full Price Again.
+            </h2>
+            <p className="text-xl text-white/80">
+              Get exclusive codes and daily deals delivered straight to your inbox.
+            </p>
+
+            <form onSubmit={handleSubscribe} className="flex flex-col md:flex-row gap-3">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email address"
+                required
+                className="flex-1 px-6 py-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white placeholder:text-white/50 focus:outline-none focus:bg-white/20"
+              />
+              <button
+                disabled={subStatus === 'loading'}
+                className="px-8 py-4 rounded-xl bg-white text-[var(--color-primary)] font-bold text-lg hover:scale-105 transition-transform shadow-xl disabled:opacity-50"
+              >
+                {subStatus === 'loading' ? 'Joining...' : 'Simulate Success (Dev)'}
+              </button>
+            </form>
+            {subStatus === 'success' && <p className="text-green-300 font-bold">Welcome directly to the club!</p>}
+            {subStatus === 'error' && <p className="text-red-200">{message}</p>}
           </div>
+        </section>
 
-          <div className="border-t border-[#111] pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-neutral-500">
-            <p>&copy; 2025 GetOffer Sri Lanka. All rights reserved.</p>
-            <div className="flex space-x-6 mt-4 md:mt-0">
-              <Link href="/privacy" className="hover:text-neutral-900 dark:hover:text-white transition">Privacy Policy</Link>
-              <Link href="/terms" className="hover:text-neutral-900 dark:hover:text-white transition">Terms of Service</Link>
-            </div>
+      </div>
+
+      {/* Mini Footer */}
+      <footer className="border-t border-white/5 mt-20 py-12 bg-[#020202]">
+        <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="flex items-center gap-2">
+            <img src="/logo.png" alt="" className="w-6 h-6 opacity-50" />
+            <span className="text-neutral-500 font-medium">© 2025 GetOffer</span>
+          </div>
+          <div className="flex gap-6 text-neutral-500 text-sm">
+            <Link href="/privacy" className="hover:text-white transition">Privacy</Link>
+            <Link href="/terms" className="hover:text-white transition">Terms</Link>
+            <Link href="/contact" className="hover:text-white transition">Contact</Link>
+          </div>
+          <div className="flex gap-4">
+            {[Facebook, Twitter, Instagram].map((Icon, i) => (
+              <a key={i} href="#" className="text-neutral-600 hover:text-white transition"><Icon size={20} /></a>
+            ))}
           </div>
         </div>
       </footer>
+
     </main>
   );
 }
-

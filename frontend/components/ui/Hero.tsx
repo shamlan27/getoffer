@@ -5,7 +5,8 @@ import SearchBar from './SearchBar';
 
 export default function Hero() {
     return (
-        <div className="relative w-full h-[600px] overflow-hidden flex items-center justify-center bg-gradient-to-br from-[var(--color-primary)] via-[var(--color-secondary)] to-[var(--color-accent)] animate-gradient">
+        <div className="relative w-full h-[600px] overflow-hidden flex items-center justify-center bg-[var(--background)]">
+            <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-primary)]/20 via-[var(--color-secondary)]/10 to-transparent animate-gradient" />
             {/* Content */}
             <div className="relative z-10 text-center px-4 max-w-4xl mx-auto text-white">
                 <motion.h1

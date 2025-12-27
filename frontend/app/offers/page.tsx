@@ -36,9 +36,9 @@ export default function OffersPage() {
     }, [offers, search, selectedCategory, selectedBrand]);
 
     return (
-        <main className="min-h-screen bg-black pt-20 pb-20">
+        <main className="min-h-screen bg-[var(--background)] pt-20 pb-20">
             {/* Header / Filter Section */}
-            <div className="bg-black border-b border-[#111] sticky top-[80px] z-30 shadow-sm transition-all duration-300">
+            <div className="bg-[var(--surface-glass)] backdrop-blur-md border-b border-white/5 sticky top-[60px] md:top-[70px] z-30 shadow-none transition-all duration-300">
                 <div className="container mx-auto px-4 py-4">
                     <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
                         <h1 className="text-2xl font-bold text-neutral-900 dark:text-white">All Active Offers</h1>

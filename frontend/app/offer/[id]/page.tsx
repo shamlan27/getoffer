@@ -46,7 +46,7 @@ export default function OfferDetail() {
     if (!offer) return <GlobalLoader />;
 
     return (
-        <main className="min-h-screen bg-[#000000] text-white p-4 md:p-8 pt-32 md:pt-24 pb-20 relative">
+        <main className="min-h-screen bg-[var(--background)] text-white p-4 md:p-8 pt-32 md:pt-24 pb-20 relative">
             {/* Back Button */}
             <div className="max-w-4xl mx-auto mb-6 relative z-10">
                 <Link href="/" className="inline-flex items-center text-neutral-400 hover:text-[var(--color-primary)] transition py-2">
@@ -57,7 +57,7 @@ export default function OfferDetail() {
             <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
                 {/* Main Content */}
                 <div className="md:col-span-2 space-y-6">
-                    <div className="bg-[#050505] rounded-3xl p-8 shadow-xl border border-[#111] relative overflow-hidden">
+                    <div className="bg-[var(--surface-100)] rounded-3xl p-8 shadow-xl border border-white/5 relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--color-primary)] opacity-10 rounded-bl-full pointer-events-none" />
 
                         <div className="flex items-center space-x-4 mb-6">
