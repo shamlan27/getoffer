@@ -36,9 +36,9 @@ export default function OffersPage() {
     }, [offers, search, selectedCategory, selectedBrand]);
 
     return (
-        <main className="min-h-screen bg-neutral-50 dark:bg-black pt-20 pb-20">
+        <main className="min-h-screen bg-black pt-20 pb-20">
             {/* Header / Filter Section */}
-            <div className="bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 sticky top-[80px] z-30 shadow-sm transition-all duration-300">
+            <div className="bg-black border-b border-white/10 sticky top-[80px] z-30 shadow-sm transition-all duration-300">
                 <div className="container mx-auto px-4 py-4">
                     <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
                         <h1 className="text-2xl font-bold text-neutral-900 dark:text-white">All Active Offers</h1>
@@ -52,7 +52,7 @@ export default function OffersPage() {
                                     placeholder="Search brands or offers..."
                                     value={search}
                                     onChange={(e) => setSearch(e.target.value)}
-                                    className="w-full bg-neutral-100 dark:bg-neutral-800 border border-transparent focus:border-[var(--color-primary)] rounded-full pl-10 pr-4 py-2 text-sm outline-none transition-all"
+                                    className="w-full bg-black border border-white/10 focus:border-[var(--color-primary)] rounded-full pl-10 pr-4 py-2 text-sm outline-none transition-all text-white placeholder-neutral-500"
                                 />
                             </div>
 
@@ -60,7 +60,7 @@ export default function OffersPage() {
                             <select
                                 value={selectedCategory}
                                 onChange={(e) => setSelectedCategory(e.target.value)}
-                                className="bg-neutral-100 dark:bg-neutral-800 border-none rounded-full px-4 py-2 text-sm font-medium cursor-pointer focus:ring-1 focus:ring-[var(--color-primary)] outline-none"
+                                className="bg-black border border-white/10 rounded-full px-4 py-2 text-sm font-medium cursor-pointer focus:ring-1 focus:ring-[var(--color-primary)] outline-none text-white"
                             >
                                 <option value="">All Categories</option>
                                 {categories.map((cat: any) => (
@@ -72,7 +72,7 @@ export default function OffersPage() {
                             <select
                                 value={selectedBrand}
                                 onChange={(e) => setSelectedBrand(e.target.value)}
-                                className="bg-neutral-100 dark:bg-neutral-800 border-none rounded-full px-4 py-2 text-sm font-medium cursor-pointer focus:ring-1 focus:ring-[var(--color-primary)] outline-none"
+                                className="bg-black border border-white/10 rounded-full px-4 py-2 text-sm font-medium cursor-pointer focus:ring-1 focus:ring-[var(--color-primary)] outline-none text-white"
                             >
                                 <option value="">All Brands</option>
                                 {brands.map((brand: any) => (
@@ -99,7 +99,7 @@ export default function OffersPage() {
                 {offersLoading ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                         {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-                            <div key={i} className="h-72 bg-neutral-200 dark:bg-neutral-800 rounded-2xl animate-pulse" />
+                            <div key={i} className="h-72 bg-white/5 rounded-2xl animate-pulse" />
                         ))}
                     </div>
                 ) : filteredOffers.length > 0 ? (

@@ -169,13 +169,13 @@ export default function Home() {
                 <div className="hidden md:flex gap-2 opacity-0 group-hover/brands:opacity-100 transition-opacity">
                   <button
                     onClick={() => brandsScrollRef.current?.scrollBy({ left: -200, behavior: 'smooth' })}
-                    className="p-2 rounded-full bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition"
+                    className="p-2 rounded-full bg-black border border-white/10 hover:bg-white/10 text-white transition"
                   >
                     <ChevronLeft size={20} className="text-neutral-600 dark:text-neutral-300" />
                   </button>
                   <button
                     onClick={() => brandsScrollRef.current?.scrollBy({ left: 200, behavior: 'smooth' })}
-                    className="p-2 rounded-full bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition"
+                    className="p-2 rounded-full bg-black border border-white/10 hover:bg-white/10 text-white transition"
                   >
                     <ChevronRight size={20} className="text-neutral-600 dark:text-neutral-300" />
                   </button>
@@ -209,7 +209,7 @@ export default function Home() {
                         </div>
                       </Link>
                       <div className="absolute -top-2 -right-2 opacity-0 group-hover/brand:opacity-100 transition-opacity duration-300 z-10">
-                        <SubscribeToggle id={brand.id} type="brand" className="shadow-lg bg-neutral-800 border border-neutral-700 w-8 h-8 flex items-center justify-center !p-0 hover:bg-[var(--color-primary)]" />
+                        <SubscribeToggle id={brand.id} type="brand" className="shadow-lg bg-black border border-white/10 w-8 h-8 flex items-center justify-center !p-0 hover:bg-[var(--color-primary)]" />
                       </div>
                     </div>
                   </div>
@@ -232,13 +232,13 @@ export default function Home() {
             <div className="flex gap-2 opacity-0 group-hover/trending:opacity-100 transition-opacity">
               <button
                 onClick={() => document.getElementById('trending-scroll')?.scrollBy({ left: -300, behavior: 'smooth' })}
-                className="p-2 rounded-full bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition"
+                className="p-2 rounded-full bg-black border border-white/10 hover:bg-white/10 text-white transition"
               >
                 <ChevronLeft size={20} className="text-neutral-600 dark:text-neutral-300" />
               </button>
               <button
                 onClick={() => document.getElementById('trending-scroll')?.scrollBy({ left: 300, behavior: 'smooth' })}
-                className="p-2 rounded-full bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition"
+                className="p-2 rounded-full bg-black border border-white/10 hover:bg-white/10 text-white transition"
               >
                 <ChevronRight size={20} className="text-neutral-600 dark:text-neutral-300" />
               </button>
