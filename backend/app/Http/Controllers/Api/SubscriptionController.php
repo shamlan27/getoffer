@@ -90,7 +90,7 @@ class SubscriptionController extends Controller
         $subscription->delete();
 
         try {
-             \Illuminate\Support\Facades\Http::timeout(10)
+             $response = \Illuminate\Support\Facades\Http::timeout(10)
                 ->withHeaders([
                     'api-key' => env('BREVO_API_KEY'),
                     'accept' => 'application/json',
@@ -102,9 +102,15 @@ class SubscriptionController extends Controller
                     ],
                     'templateId' => 2
                 ]);
+
+             if (!$response->successful()) {
+                 \Illuminate\Support\Facades\Log::error('Brevo Unsubscribe Error: ' . $response->body());
+             } else {
+                 \Illuminate\Support\Facades\Log::info('Brevo Unsubscribe Success: ' . $response->body());
+             }
+
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('Unsubscribe Email Error: ' . $e->getMessage());
-            // Don't fail the request if email fails, user is already unsubscribed
+            \Illuminate\Support\Facades\Log::error('Unsubscribe Email Exception: ' . $e->getMessage());
         }
 
         return response()->json(['message' => 'Unsubscribed successfully.']);
