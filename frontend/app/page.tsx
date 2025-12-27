@@ -8,8 +8,8 @@ import useSWR from 'swr';
 import axios from '@/lib/axios';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { useState } from 'react';
-import { Facebook, Instagram, Twitter, Linkedin, Youtube } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Facebook, Instagram, Twitter, Linkedin, Youtube, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const fetcher = (url: string) => axios.get(url).then(res => res.data);
 
@@ -19,6 +19,27 @@ export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [email, setEmail] = useState('');
   const [subStatus, setSubStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [isTrendingPaused, setIsTrendingPaused] = useState(false);
+  const trendingScrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (isTrendingPaused) return;
+
+    const scrollContainer = trendingScrollRef.current;
+    if (!scrollContainer) return;
+
+    const interval = setInterval(() => {
+      // Logic for smooth continuous scrolling
+      if (scrollContainer.scrollLeft + scrollContainer.clientWidth >= scrollContainer.scrollWidth) {
+        // Reset to start if at end
+        scrollContainer.scrollTo({ left: 0, behavior: 'auto' });
+      } else {
+        scrollContainer.scrollBy({ left: 1, behavior: 'auto' });
+      }
+    }, 20); // 50fps approx
+
+    return () => clearInterval(interval);
+  }, [isTrendingPaused]);
 
   const getOffersApiUrl = (isFeatured = false) => {
     const params = new URLSearchParams();
@@ -108,17 +129,35 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Scrolling Banners (if any) */}
+      {/* Scrolling Banners (Trending Promotions) */}
       {scrollingBanners.length > 0 && (
-        <section className="py-12 border-b border-neutral-200 dark:border-white/5 overflow-hidden">
-          <div className="container mx-auto px-6 mb-6">
+        <section className="py-12 border-b border-neutral-200 dark:border-white/5 overflow-hidden group/trending">
+          <div className="container mx-auto px-6 mb-6 flex items-center justify-between">
             <h2 className="text-xl font-medium text-neutral-800 dark:text-white/80">Trending Promotions</h2>
+            <div className="flex gap-2 opacity-0 group-hover/trending:opacity-100 transition-opacity">
+              <button
+                onClick={() => document.getElementById('trending-scroll')?.scrollBy({ left: -300, behavior: 'smooth' })}
+                className="p-2 rounded-full bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition"
+              >
+                <ChevronLeft size={20} className="text-neutral-600 dark:text-neutral-300" />
+              </button>
+              <button
+                onClick={() => document.getElementById('trending-scroll')?.scrollBy({ left: 300, behavior: 'smooth' })}
+                className="p-2 rounded-full bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition"
+              >
+                <ChevronRight size={20} className="text-neutral-600 dark:text-neutral-300" />
+              </button>
+            </div>
           </div>
-          <div className="relative w-full overflow-hidden">
-            <div className={shouldAnimateBanners
-              ? "flex space-x-6 animate-marquee w-max hover:[animation-play-state:paused] px-4"
-              : "flex space-x-6 px-4 overflow-x-auto no-scrollbar justify-center"
-            }>
+          <div className="relative w-full"
+            onMouseEnter={() => setIsTrendingPaused(true)}
+            onMouseLeave={() => setIsTrendingPaused(false)}
+          >
+            <div
+              id="trending-scroll"
+              ref={trendingScrollRef}
+              className="flex space-x-6 px-4 overflow-x-auto no-scrollbar scroll-smooth pb-4"
+            >
               {marqueeBanners.map((banner: any, idx: number) => (
                 <a
                   key={`${banner.id}-${idx}`}
