@@ -213,7 +213,7 @@ class AuthController extends Controller
 
     public function googleCallback()
     {
-        // dd(request()->all()); // UNCOMMENT TO DEBUG
+
         \Illuminate\Support\Facades\Log::info('Google Callback:', request()->all());
         
         try {
