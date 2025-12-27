@@ -293,7 +293,7 @@ export default function Home() {
                             <img
                               src={brand.logo_url || `${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${brand.logo}`}
                               alt={brand.name}
-                              className="w-[80%] h-[80%] object-contain filter grayscale-0 md:grayscale md:group-hover/brand:grayscale-0 transition-all duration-500"
+                              className="w-[80%] h-[80%] object-contain transition-all duration-500"
                             />
                           ) : (
                             <span className="text-2xl font-bold text-neutral-600 group-hover/brand:text-white">{brand.name.charAt(0)}</span>
