@@ -72,7 +72,7 @@ export default function OfferCard({ brand, description, code, expiry, verified, 
             {/* Top Badge */}
             <div className="flex justify-between items-center mb-4">
                 <div className="flex items-center space-x-3">
-                    <div className="relative w-10 h-10 bg-neutral-800 rounded-full flex items-center justify-center text-lg font-bold text-neutral-500 shadow-sm overflow-hidden border border-neutral-700">
+                    <div className="relative w-10 h-10 bg-black rounded-full flex items-center justify-center text-lg font-bold text-neutral-500 shadow-sm overflow-hidden border border-neutral-800">
                         {logo ? (
                             <Image
                                 src={logo}
@@ -98,7 +98,7 @@ export default function OfferCard({ brand, description, code, expiry, verified, 
             </div>
 
             {image && variant !== 'compact' && (
-                <div className={`relative mb-4 rounded-lg overflow-hidden w-full bg-neutral-800 ${variant === 'featured' ? 'h-40' : 'h-32'}`}>
+                <div className={`relative mb-4 rounded-lg overflow-hidden w-full bg-black border border-neutral-900 ${variant === 'featured' ? 'h-40' : 'h-32'}`}>
                     <Image
                         src={image}
                         alt={description}
@@ -127,7 +127,7 @@ export default function OfferCard({ brand, description, code, expiry, verified, 
                             onClick={(e) => { e.preventDefault(); handleCopy(); }}
                             className={`flex items-center justify-center space-x-2 px-3 py-2 rounded-lg font-bold text-xs transition-colors flex-1 max-w-[140px] ${copied
                                 ? 'bg-green-500 text-white'
-                                : 'bg-neutral-800 hover:bg-[var(--color-primary)] hover:text-white text-neutral-200'
+                                : 'bg-black border border-neutral-800 hover:bg-[var(--color-primary)] hover:text-white text-neutral-200'
                                 }`}
                         >
                             {copied ? (

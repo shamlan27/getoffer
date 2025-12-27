@@ -265,7 +265,7 @@ export default function Home() {
                     alt={banner.title || 'Banner'}
                     className="w-full h-full object-cover opacity-100 md:opacity-90 dark:md:opacity-80 group-hover:opacity-100 transition-opacity"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent md:from-black/80 md:to-transparent flex items-end p-4 opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent md:from-black/90 md:to-transparent flex items-end p-4 opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity">
                     <span className="text-white font-medium truncate">{banner.title}</span>
                   </div>
                 </a>
@@ -278,7 +278,7 @@ export default function Home() {
       {/* Featured Offers Marquee */}
       {featuredOffers.length > 0 && (
         <section className="py-16 relative bg-[#000000] group/featured">
-          <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/10 via-[#050505] to-[#050505] pointer-events-none" />
+          <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/10 via-[#000000] to-[#000000] pointer-events-none" />
           <div className="container mx-auto px-6 mb-8 relative z-10 flex justify-between items-end">
             <div>
               <h2 className="text-3xl font-bold text-neutral-900 dark:text-white mb-2">Featured Offers</h2>
@@ -345,8 +345,8 @@ export default function Home() {
             <button
               onClick={() => setSelectedCategory('')}
               className={`flex-shrink-0 flex items-center space-x-2 px-5 py-2.5 rounded-full transition-all duration-300 font-medium ${selectedCategory === ''
-                ? 'bg-neutral-900 text-white dark:bg-white dark:text-black shadow-lg'
-                : 'bg-neutral-100 text-neutral-600 dark:bg-white/5 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-white/10 border border-transparent dark:border-white/5'
+                ? 'bg-white text-black shadow-lg'
+                : 'bg-black text-neutral-300 hover:bg-white/10 border border-white/10'
                 }`}
             >
               <span>All</span>
@@ -356,7 +356,7 @@ export default function Home() {
                 key={cat.id}
                 className={`flex-shrink-0 group flex items-center pl-1 pr-3 py-1 rounded-full border transition-all duration-300 gap-2 ${selectedCategory === cat.slug
                   ? 'bg-[var(--color-primary)]/10 border-[var(--color-primary)] text-[var(--color-primary)]'
-                  : 'bg-white/50 dark:bg-white/5 border-neutral-200 dark:border-white/5 text-neutral-600 dark:text-neutral-300'
+                  : 'bg-black border-white/10 text-neutral-300'
                   }`}
               >
                 <button
