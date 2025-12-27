@@ -60,7 +60,7 @@ export default function OfferCard({ brand, description, code, expiry, verified, 
     return (
         <motion.div
             whileHover={{ y: -5 }}
-            className={`group relative bg-black rounded-2xl border border-white/5 p-5 overflow-hidden transition-all duration-300 hover:shadow-2xl hover:border-[var(--color-primary)]/50 h-full flex flex-col ${status === 'expired' ? 'opacity-60 grayscale' : ''}`}
+            className={`group relative bg-black rounded-2xl border border-[#111] p-5 overflow-hidden transition-all duration-300 hover:shadow-2xl hover:border-[var(--color-primary)]/50 h-full flex flex-col ${status === 'expired' ? 'opacity-60 grayscale' : ''}`}
         >
             {/* Expiry Badge */}
             {status === 'expiring' && (
@@ -72,7 +72,7 @@ export default function OfferCard({ brand, description, code, expiry, verified, 
             {/* Top Badge */}
             <div className="flex justify-between items-center mb-4">
                 <div className="flex items-center space-x-3">
-                    <div className="relative w-10 h-10 bg-black rounded-full flex items-center justify-center text-lg font-bold text-neutral-500 overflow-hidden border border-white/5">
+                    <div className="relative w-10 h-10 bg-black rounded-full flex items-center justify-center text-lg font-bold text-neutral-500 overflow-hidden border border-[#111]">
                         {logo ? (
                             <Image
                                 src={logo}
@@ -98,7 +98,7 @@ export default function OfferCard({ brand, description, code, expiry, verified, 
             </div>
 
             {image && variant !== 'compact' && (
-                <div className={`relative mb-4 rounded-lg overflow-hidden w-full bg-black border border-white/5 ${variant === 'featured' ? 'h-40' : 'h-32'}`}>
+                <div className={`relative mb-4 rounded-lg overflow-hidden w-full bg-black border border-[#111] ${variant === 'featured' ? 'h-40' : 'h-32'}`}>
                     <Image
                         src={image}
                         alt={description}
@@ -114,7 +114,7 @@ export default function OfferCard({ brand, description, code, expiry, verified, 
             </p>
 
             {/* Footer / Action */}
-            <div className="mt-auto pt-4 border-t border-dashed border-white/5">
+            <div className="mt-auto pt-4 border-t border-dashed border-[#111]">
                 <div className="flex items-center justify-between gap-3">
                     <div className={`flex items-center text-xs font-medium whitespace-nowrap ${status === 'expired' ? 'text-red-500' :
                         status === 'expiring' ? 'text-orange-500' : 'text-neutral-500 dark:text-neutral-400'
@@ -127,7 +127,7 @@ export default function OfferCard({ brand, description, code, expiry, verified, 
                             onClick={(e) => { e.preventDefault(); handleCopy(); }}
                             className={`flex items-center justify-center space-x-2 px-3 py-2 rounded-lg font-bold text-xs transition-colors flex-1 max-w-[140px] ${copied
                                 ? 'bg-green-500 text-white'
-                                : 'bg-black border border-white/5 hover:bg-[var(--color-primary)] hover:text-white text-neutral-200'
+                                : 'bg-black border border-[#111] hover:bg-[var(--color-primary)] hover:text-white text-neutral-200'
                                 }`}
                         >
                             {copied ? (

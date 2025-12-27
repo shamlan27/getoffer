@@ -169,7 +169,7 @@ export default function Home() {
                 <div className="hidden md:flex gap-2 opacity-0 group-hover/brands:opacity-100 transition-opacity">
                   <button
                     onClick={() => brandsScrollRef.current?.scrollBy({ left: -200, behavior: 'smooth' })}
-                    className="p-2 rounded-full bg-black border border-white/5 hover:bg-white/10 text-white transition"
+                    className="p-2 rounded-full bg-black border border-[#111] hover:bg-[#111] text-white transition"
                   >
                     <ChevronLeft size={20} className="text-neutral-600 dark:text-neutral-300" />
                   </button>
@@ -209,7 +209,7 @@ export default function Home() {
                         </div>
                       </Link>
                       <div className="absolute -top-2 -right-2 opacity-0 group-hover/brand:opacity-100 transition-opacity duration-300 z-10">
-                        <SubscribeToggle id={brand.id} type="brand" className="shadow-lg bg-black border border-white/5 w-8 h-8 flex items-center justify-center !p-0 hover:bg-[var(--color-primary)]" />
+                        <SubscribeToggle id={brand.id} type="brand" className="shadow-lg bg-black border border-[#111] w-8 h-8 flex items-center justify-center !p-0 hover:bg-[var(--color-primary)]" />
                       </div>
                     </div>
                   </div>
@@ -232,7 +232,7 @@ export default function Home() {
             <div className="flex gap-2 opacity-0 group-hover/trending:opacity-100 transition-opacity">
               <button
                 onClick={() => document.getElementById('trending-scroll')?.scrollBy({ left: -300, behavior: 'smooth' })}
-                className="p-2 rounded-full bg-black border border-white/5 hover:bg-white/10 text-white transition"
+                className="p-2 rounded-full bg-black border border-[#111] hover:bg-[#111] text-white transition"
               >
                 <ChevronLeft size={20} className="text-neutral-600 dark:text-neutral-300" />
               </button>
@@ -346,7 +346,7 @@ export default function Home() {
               onClick={() => setSelectedCategory('')}
               className={`flex-shrink-0 flex items-center space-x-2 px-5 py-2.5 rounded-full transition-all duration-300 font-medium ${selectedCategory === ''
                 ? 'bg-white text-black shadow-lg'
-                : 'bg-black text-neutral-300 hover:bg-white/10 border border-white/5'
+                : 'bg-black text-neutral-300 hover:bg-[#111] border border-[#111]'
                 }`}
             >
               <span>All</span>
@@ -356,7 +356,7 @@ export default function Home() {
                 key={cat.id}
                 className={`flex-shrink-0 group flex items-center pl-1 pr-3 py-1 rounded-full border transition-all duration-300 gap-2 ${selectedCategory === cat.slug
                   ? 'bg-[var(--color-primary)]/10 border-[var(--color-primary)] text-[var(--color-primary)]'
-                  : 'bg-black border-white/5 text-neutral-300'
+                  : 'bg-black border-[#111] text-neutral-300'
                   }`}
               >
                 <button
@@ -385,7 +385,7 @@ export default function Home() {
         {/* Offers Grid */}
         <div className="mb-8 flex items-center justify-between">
           <h2 className="text-2xl font-bold text-white">Latest Deals</h2>
-          <Link href="/offers" className="px-4 py-2 border border-white/5 rounded-full text-sm font-medium hover:bg-white hover:text-black transition-all">
+          <Link href="/offers" className="px-4 py-2 border border-[#111] rounded-full text-sm font-medium hover:bg-white hover:text-black transition-all">
             Browse All
           </Link>
         </div>
@@ -427,7 +427,7 @@ export default function Home() {
         <div className="mt-12 flex justify-center">
           <Link
             href="/offers"
-            className="group relative px-8 py-3 rounded-full bg-white/5 border border-white/5 text-white font-semibold hover:bg-[var(--color-primary)] hover:border-[var(--color-primary)] transition-all duration-300 flex items-center gap-2"
+            className="group relative px-8 py-3 rounded-full bg-[#050505] border border-[#111] text-white font-semibold hover:bg-[var(--color-primary)] hover:border-[var(--color-primary)] transition-all duration-300 flex items-center gap-2"
           >
             <span>Browse All Offers</span>
             <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
