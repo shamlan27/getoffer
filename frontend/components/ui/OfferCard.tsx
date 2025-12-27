@@ -114,7 +114,7 @@ export default function OfferCard({ brand, description, code, expiry, verified, 
             </p>
 
             {/* Footer / Action */}
-            <div className="mt-auto pt-4 border-t border-dashed border-neutral-200 dark:border-neutral-800">
+            <div className="mt-auto pt-4 border-t border-dashed border-white/5">
                 <div className="flex items-center justify-between gap-3">
                     <div className={`flex items-center text-xs font-medium whitespace-nowrap ${status === 'expired' ? 'text-red-500' :
                         status === 'expiring' ? 'text-orange-500' : 'text-neutral-500 dark:text-neutral-400'

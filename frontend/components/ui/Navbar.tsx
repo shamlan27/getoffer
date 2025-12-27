@@ -80,7 +80,7 @@ export default function Navbar() {
                         {user ? (
                             <div className="flex items-center space-x-3">
                                 <Link href="/dashboard" className="flex items-center gap-2 text-sm font-medium text-neutral-300 hover:text-white transition">
-                                    <div className="w-8 h-8 rounded-full bg-black flex items-center justify-center border border-white/10">
+                                    <div className="w-8 h-8 rounded-full bg-black flex items-center justify-center border border-white/5">
                                         <User size={14} />
                                     </div>
                                     <span>{user.name.split(' ')[0]}</span>
@@ -90,7 +90,7 @@ export default function Navbar() {
                             isSubscribed ? (
                                 <button
                                     onClick={handleUnsubscribe}
-                                    className="px-6 py-2.5 rounded-full bg-black text-neutral-300 border border-white/10 text-sm font-bold hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/50 transition-all shadow-[0_0_20px_rgba(0,0,0,0.3)] flex items-center gap-2"
+                                    className="px-6 py-2.5 rounded-full bg-black text-neutral-300 border border-white/5 text-sm font-bold hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/50 transition-all shadow-[0_0_20px_rgba(0,0,0,0.3)] flex items-center gap-2"
                                 >
                                     <Bell size={16} className="fill-current" />
                                     Unsubscribe
@@ -120,7 +120,7 @@ export default function Navbar() {
                             <Link href="/brands" onClick={() => setIsMenuOpen(false)} className="text-2xl font-bold text-neutral-400 hover:text-white">Brands</Link>
                             <Link href="/categories" onClick={() => setIsMenuOpen(false)} className="text-2xl font-bold text-neutral-400 hover:text-white">Categories</Link>
 
-                            <div className="w-16 h-[1px] bg-white/10 my-4" />
+                            <div className="w-16 h-[1px] bg-white/5 my-4" />
 
 
                             {/* Search Trigger for Mobile - Simplified to just toggle search visibility or distinct mobile search */}
@@ -133,7 +133,7 @@ export default function Navbar() {
                                 <button onClick={() => { logout(); setIsMenuOpen(false); }} className="text-red-500 text-lg font-medium mt-4">Log Out</button>
                             ) : (
                                 isSubscribed ? (
-                                    <button onClick={() => { setIsMenuOpen(false); handleUnsubscribe(); }} className="px-8 py-3 rounded-full bg-black text-red-400 border border-white/10 font-bold text-lg">
+                                    <button onClick={() => { setIsMenuOpen(false); handleUnsubscribe(); }} className="px-8 py-3 rounded-full bg-black text-red-400 border border-white/5 font-bold text-lg">
                                         Unsubscribe
                                     </button>
                                 ) : (
