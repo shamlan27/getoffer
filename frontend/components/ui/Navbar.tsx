@@ -3,15 +3,13 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useAuth } from '@/context/AuthContext';
-import { useTheme } from '@/context/ThemeContext';
-import { User, LogOut, Menu, X, ShoppingBag, Bell, Sun, Moon, Search } from 'lucide-react';
+import { User, LogOut, Menu, X, ShoppingBag, Bell, Search } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import axios from '@/lib/axios';
 import GlobalSearch from './GlobalSearch';
 
 export default function Navbar() {
     const { user, logout } = useAuth();
-    const { theme, toggleTheme } = useTheme();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isSubscribeOpen, setIsSubscribeOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
@@ -74,15 +72,10 @@ export default function Navbar() {
                     <div className="hidden md:flex items-center gap-2">
                         <GlobalSearch />
                         <div className="h-6 w-[1px] bg-neutral-200 dark:bg-white/10 mx-2" />
-                        <button
-                            onClick={toggleTheme}
-                            className="p-2 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors text-neutral-600 dark:text-neutral-300 hover:text-black dark:hover:text-white"
-                            aria-label="Toggle Theme"
-                        >
-                            {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
-                        </button>
 
-                        <Link href="/contact" className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white transition">Contact</Link>
+
+
+                        <Link href="/contact" className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white transition mr-4">Contact</Link>
 
                         {user ? (
                             <div className="flex items-center space-x-3">
@@ -129,18 +122,12 @@ export default function Navbar() {
 
                             <div className="w-16 h-[1px] bg-neutral-800 my-4" />
 
-                            <div className="flex items-center gap-4">
-                                <button
-                                    onClick={() => { toggleTheme(); setIsMenuOpen(false); }}
-                                    className="p-3 rounded-full bg-white/10 text-white hover:bg-white/20 transition"
-                                >
-                                    {theme === 'dark' ? <Sun size={24} /> : <Moon size={24} />}
-                                </button>
-                                {/* Search Trigger for Mobile - Simplified to just toggle search visibility or distinct mobile search */}
-                                <div className="block md:hidden">
-                                    <GlobalSearch />
-                                </div>
+
+                            {/* Search Trigger for Mobile - Simplified to just toggle search visibility or distinct mobile search */}
+                            <div className="block md:hidden">
+                                <GlobalSearch />
                             </div>
+
 
                             {user ? (
                                 <button onClick={() => { logout(); setIsMenuOpen(false); }} className="text-red-500 text-lg font-medium mt-4">Log Out</button>
@@ -159,12 +146,14 @@ export default function Navbar() {
                         </div>
                     )}
                 </div>
-            </header>
+            </header >
 
             {/* Subscribe Modal */}
-            {isSubscribeOpen && (
-                <SubscribeModal onClose={() => setIsSubscribeOpen(false)} onSuccess={handleSubscribeSuccess} />
-            )}
+            {
+                isSubscribeOpen && (
+                    <SubscribeModal onClose={() => setIsSubscribeOpen(false)} onSuccess={handleSubscribeSuccess} />
+                )
+            }
         </>
     );
 }

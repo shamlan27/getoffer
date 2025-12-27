@@ -7,6 +7,7 @@ import axios from '@/lib/axios';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
 import GlobalLoader from '@/components/ui/GlobalLoader';
+import { PushToggle } from '@/components/ui/PushToggle';
 
 const fetcher = (url: string) => axios.get(url).then(res => res.data);
 
@@ -165,9 +166,7 @@ export default function OfferDetail() {
                             <div className="pt-4 border-t border-white/20">
                                 <div className="flex items-center justify-between">
                                     <span className="text-white text-sm font-medium">Push Notifications</span>
-                                    <button className="bg-white/20 hover:bg-white/30 rounded-full p-1 w-10 h-6 flex items-center transition relative">
-                                        <span className="w-4 h-4 bg-white rounded-full shadow-sm transform translate-x-0 transition" />
-                                    </button>
+                                    <PushToggle brandId={offer.brand?.id} />
                                 </div>
                                 <p className="text-white/60 text-xs mt-1">Get instant alerts for {offer.brand?.name}</p>
                             </div>
