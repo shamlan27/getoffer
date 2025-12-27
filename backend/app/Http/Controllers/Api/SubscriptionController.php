@@ -51,19 +51,13 @@ class SubscriptionController extends Controller
                     'content-type' => 'application/json'
                 ])
                 ->post('https://api.brevo.com/v3/smtp/email', [
-                    'sender' => [
-                        'name' => 'Get-Offer',
-                        'email' => 'no-reply@get-offer.live'
-                    ],
                     'to' => [
                         ['email' => $request->email]
                     ],
-                    'subject' => '🎉 Thanks for subscribing to Get-Offer!',
-                    'htmlContent' => "
-                        <h2>Subscription successful</h2>
-                        <p>You have successfully subscribed to our newsletter.</p>
-                        <p><a href='{$unsubscribeLink}'>Unsubscribe</a></p>
-                    "
+                    'templateId' => 1,
+                    'params' => [
+                        'UNSUBSCRIBE_LINK' => $unsubscribeLink
+                    ]
                 ]);
 
             if ($response->successful()) {
@@ -92,7 +86,26 @@ class SubscriptionController extends Controller
             return response()->json(['message' => 'Invalid or expired token.'], 404);
         }
 
+        $email = $subscription->email;
         $subscription->delete();
+
+        try {
+             \Illuminate\Support\Facades\Http::timeout(10)
+                ->withHeaders([
+                    'api-key' => env('BREVO_API_KEY'),
+                    'accept' => 'application/json',
+                    'content-type' => 'application/json'
+                ])
+                ->post('https://api.brevo.com/v3/smtp/email', [
+                    'to' => [
+                        ['email' => $email]
+                    ],
+                    'templateId' => 2
+                ]);
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Unsubscribe Email Error: ' . $e->getMessage());
+            // Don't fail the request if email fails, user is already unsubscribed
+        }
 
         return response()->json(['message' => 'Unsubscribed successfully.']);
     }
