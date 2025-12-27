@@ -78,6 +78,12 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+
+  /* Mobile Fixes */
+  -webkit-tap-highlight-color: transparent;
+  /* Removes gray box on tap */
+  overscroll-behavior-y: none;
+  /* Prevents gray/white bounce on pull-to-refresh boundaries */
 }
 
 /* Custom Scrollbar */

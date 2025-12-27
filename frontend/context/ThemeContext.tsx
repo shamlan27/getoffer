@@ -15,14 +15,27 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     const [theme] = useState<Theme>('dark'); // Always dark
 
     useEffect(() => {
+        // STRICT ENFORCEMENT
         const root = window.document.documentElement;
         root.classList.remove('light');
         root.classList.add('dark');
+        root.style.backgroundColor = '#000000'; // Force JS style
+        root.style.colorScheme = 'dark';
         localStorage.setItem('theme', 'dark');
+
+        // Prevent system changes from overriding
+        const mediaQuery = window.matchMedia('(prefers-color-scheme: light)');
+        const handler = () => {
+            root.classList.remove('light');
+            root.classList.add('dark');
+        };
+        mediaQuery.addEventListener('change', handler);
+        return () => mediaQuery.removeEventListener('change', handler);
     }, []);
 
     const toggleTheme = () => {
-        // Disabled
+        // Permanently Disabled
+        console.log("Theme switching disabled. Locked to Dark Mode.");
     };
 
     return (
