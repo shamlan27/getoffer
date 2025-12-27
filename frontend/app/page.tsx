@@ -30,19 +30,40 @@ export default function Home() {
 
   // Helper for auto-scrolling
   const useAutoScroll = (ref: any, isPaused: boolean) => {
+    const animationRef = useRef<number>();
+    // We use a ref to track precise scroll position to allow for sub-pixel scrolling speeds (e.g. 0.5px/frame)
+    // However, since scrollLeft is integer-based in most browsers, we just add a small amount each frame
+    // and rely on the high framerate for smoothness.
+
     useEffect(() => {
-      if (isPaused) return;
       const scrollContainer = ref.current;
       if (!scrollContainer) return;
 
-      const interval = setInterval(() => {
+      const animate = () => {
+        if (!scrollContainer) return;
+
+        // Move 1px every frame (approx 60px/sec at 60fps)
+        // If this is too fast, we can use an accumulator.
+        // Let's try 0.5 speed essentially by running every other frame or using accumulator.
+        // Simple smooth scroll:
         if (scrollContainer.scrollLeft + scrollContainer.clientWidth >= scrollContainer.scrollWidth - 1) {
           scrollContainer.scrollTo({ left: 0, behavior: 'auto' });
         } else {
-          scrollContainer.scrollBy({ left: 1, behavior: 'auto' });
+          scrollContainer.scrollLeft += 1;
         }
-      }, 30);
-      return () => clearInterval(interval);
+
+        animationRef.current = requestAnimationFrame(animate);
+      };
+
+      if (!isPaused) {
+        animationRef.current = requestAnimationFrame(animate);
+      } else {
+        if (animationRef.current) cancelAnimationFrame(animationRef.current);
+      }
+
+      return () => {
+        if (animationRef.current) cancelAnimationFrame(animationRef.current);
+      };
     }, [isPaused, ref]);
   };
 
