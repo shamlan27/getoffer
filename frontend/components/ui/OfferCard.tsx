@@ -72,7 +72,7 @@ export default function OfferCard({ brand, description, code, expiry, verified, 
             {/* Top Badge */}
             <div className="flex justify-between items-center mb-4">
                 <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 bg-white dark:bg-neutral-800 rounded-full flex items-center justify-center text-lg font-bold text-neutral-500 shadow-sm overflow-hidden border border-neutral-100 dark:border-neutral-700">
+                    <div className="relative w-10 h-10 bg-white dark:bg-neutral-800 rounded-full flex items-center justify-center text-lg font-bold text-neutral-500 shadow-sm overflow-hidden border border-neutral-100 dark:border-neutral-700">
                         {logo ? (
                             <Image
                                 src={logo}
