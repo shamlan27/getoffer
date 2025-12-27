@@ -24,6 +24,7 @@ Route::get('/categories', [OfferController::class, 'categories']);
 Route::get('/brands', [BrandController::class, 'index']);
 Route::get('/brands/{id}', [BrandController::class, 'show']);
 Route::post('/subscribe', [SubscriptionController::class, 'subscribe']);
+Route::post('/unsubscribe', [SubscriptionController::class, 'unsubscribe']);
 
 Route::post('/subscribe/brand', [SubscriptionController::class, 'subscribeBrand']);
 Route::post('/subscribe/category', [SubscriptionController::class, 'subscribeCategory']);

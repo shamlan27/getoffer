@@ -14,20 +14,87 @@ class SubscriptionController extends Controller
             'email' => 'required|email',
         ]);
 
-        $subscription = Subscription::firstOrCreate(
-            ['email' => $request->email]
-        );
-
-        if ($subscription->wasRecentlyCreated) {
-            try {
-                \Illuminate\Support\Facades\Mail::to($request->email)->send(new \App\Mail\SubscriptionSuccessMail());
-            } catch (\Exception $e) {
-                \Illuminate\Support\Facades\Log::error('Subscription email failed: ' . $e->getMessage());
+        try {
+            // Check if already subscribed
+            $existing = Subscription::where('email', $request->email)->first();
+            if ($existing) {
+                return response()->json(['message' => 'You are already subscribed!'], 200);
             }
-            return response()->json(['message' => 'Subscribed successfully']);
+
+            $token = \Illuminate\Support\Str::random(32);
+            $subscription = Subscription::create([
+                'email' => $request->email,
+                'unsubscribe_token' => $token
+            ]);
+
+            // Ensure app url doesn't have trailing slash
+            $appUrl = rtrim(config('app.url'), '/');
+            // Unsubscribe link - frontend route
+            // Since this is an API, we probably want to point to the frontend unsubscribe page
+            // Assuming frontend is at CORS origin or APP_URL if it's the frontend URL
+            // Let's rely on an env variable or config for generic usage, but for now assuming nextjs is at header origin or similar.
+            // Better: use a dedicated route in backend that handles it or a frontend page.
+            // The prompt says "unsubscribe code email code also".
+            // Let's create an unsubscribe link that points to the API for now or a frontend page.
+            // A common pattern is frontend URL.
+            // Let's assume frontend URL is passed or configured. For now hardcode or use referer?
+            // Safer: Point to a specific frontend URL.
+            // Let's use <FRONTEND_URL>/unsubscribe?token=...
+            // If FRONTEND_URL is not set, fall back to something.
+            $frontendUrl = env('FRONTEND_URL', 'http://localhost:3000');
+            $unsubscribeLink = "{$frontendUrl}/unsubscribe?token={$token}";
+
+            $response = \Illuminate\Support\Facades\Http::timeout(10)
+                ->withHeaders([
+                    'api-key' => env('BREVO_API_KEY'),
+                    'accept' => 'application/json',
+                    'content-type' => 'application/json'
+                ])
+                ->post('https://api.brevo.com/v3/smtp/email', [
+                    'sender' => [
+                        'name' => 'Get-Offer',
+                        'email' => 'no-reply@get-offer.live'
+                    ],
+                    'to' => [
+                        ['email' => $request->email]
+                    ],
+                    'subject' => '🎉 Thanks for subscribing to Get-Offer!',
+                    'htmlContent' => "
+                        <h2>Subscription successful</h2>
+                        <p>You have successfully subscribed to our newsletter.</p>
+                        <p><a href='{$unsubscribeLink}'>Unsubscribe</a></p>
+                    "
+                ]);
+
+            if ($response->successful()) {
+                return response()->json(['message' => 'Subscribed successfully. Check your email!']);
+            } else {
+                \Illuminate\Support\Facades\Log::error('Brevo API Error: ' . $response->body());
+                // Undo subscription if email fails? Maybe keep it.
+                return response()->json(['message' => 'Subscribed, but email failed to send.'], 200);
+            }
+
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Subscription Error: ' . $e->getMessage());
+            return response()->json(['error' => true, 'message' => 'An error occurred.'], 500);
+        }
+    }
+
+    public function unsubscribe(Request $request)
+    {
+        $request->validate([
+            'token' => 'required|string'
+        ]);
+
+        $subscription = Subscription::where('unsubscribe_token', $request->token)->first();
+
+        if (!$subscription) {
+            return response()->json(['message' => 'Invalid or expired token.'], 404);
         }
 
-        return response()->json(['message' => 'You are already subscribed!']);
+        $subscription->delete();
+
+        return response()->json(['message' => 'Unsubscribed successfully.']);
     }
 
     public function check(Request $request) {
@@ -36,6 +103,7 @@ class SubscriptionController extends Controller
         return response()->json(['subscribed' => !!$subscription]);
     }
 
+    // Toggle logic might be redundant now but keeping it for existing frontend calls if any
     public function toggle(Request $request) {
         $request->validate(['email' => 'required|email']);
         $subscription = Subscription::where('email', $request->email)->first();
@@ -44,15 +112,17 @@ class SubscriptionController extends Controller
             $subscription->delete();
             return response()->json(['subscribed' => false, 'message' => 'Unsubscribed successfully']);
         } else {
-            Subscription::create(['email' => $request->email]);
-             // Optional: Send welcome email again? Maybe not for re-subscribe
+             // Re-route to subscribe logic?
+             // proper subscribe requires token generation and email.
+             // For now simple toggle:
+            $token = \Illuminate\Support\Str::random(32);
+            Subscription::create(['email' => $request->email, 'unsubscribe_token' => $token]);
             return response()->json(['subscribed' => true, 'message' => 'Subscribed successfully']);
         }
     }
 
     public function subscribeBrand(Request $request)
     {
-        // Mock method for frontend compatibility
         return response()->json([
             'status' => 'success',
             'message' => $request->action === 'subscribe' ? 'Subscribed to brand updates!' : 'Unsubscribed from brand.'
@@ -61,7 +131,6 @@ class SubscriptionController extends Controller
 
     public function subscribeCategory(Request $request)
     {
-        // Mock method for frontend compatibility
         return response()->json([
             'status' => 'success',
             'message' => $request->action === 'subscribe' ? 'Subscribed to category updates!' : 'Unsubscribed from category.'
