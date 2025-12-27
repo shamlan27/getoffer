@@ -22,24 +22,33 @@ export default function Home() {
   const [isTrendingPaused, setIsTrendingPaused] = useState(false);
   const trendingScrollRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (isTrendingPaused) return;
+  const [isFeaturedPaused, setIsFeaturedPaused] = useState(false);
+  const featuredScrollRef = useRef<HTMLDivElement>(null);
 
-    const scrollContainer = trendingScrollRef.current;
-    if (!scrollContainer) return;
+  const [isBrandsPaused, setIsBrandsPaused] = useState(false);
+  const brandsScrollRef = useRef<HTMLDivElement>(null);
 
-    const interval = setInterval(() => {
-      // Logic for smooth continuous scrolling
-      if (scrollContainer.scrollLeft + scrollContainer.clientWidth >= scrollContainer.scrollWidth) {
-        // Reset to start if at end
-        scrollContainer.scrollTo({ left: 0, behavior: 'auto' });
-      } else {
-        scrollContainer.scrollBy({ left: 1, behavior: 'auto' });
-      }
-    }, 20); // 50fps approx
+  // Helper for auto-scrolling
+  const useAutoScroll = (ref: any, isPaused: boolean) => {
+    useEffect(() => {
+      if (isPaused) return;
+      const scrollContainer = ref.current;
+      if (!scrollContainer) return;
 
-    return () => clearInterval(interval);
-  }, [isTrendingPaused]);
+      const interval = setInterval(() => {
+        if (scrollContainer.scrollLeft + scrollContainer.clientWidth >= scrollContainer.scrollWidth - 1) {
+          scrollContainer.scrollTo({ left: 0, behavior: 'auto' });
+        } else {
+          scrollContainer.scrollBy({ left: 1, behavior: 'auto' });
+        }
+      }, 30);
+      return () => clearInterval(interval);
+    }, [isPaused, ref]);
+  };
+
+  useAutoScroll(trendingScrollRef, isTrendingPaused);
+  useAutoScroll(featuredScrollRef, isFeaturedPaused);
+  useAutoScroll(brandsScrollRef, isBrandsPaused);
 
   const getOffersApiUrl = (isFeatured = false) => {
     const params = new URLSearchParams();
@@ -129,6 +138,71 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Popular Brands (Moves above Trending) */}
+      <section className="container mx-auto px-6 py-12 border-b border-neutral-200 dark:border-white/5 group/brands">
+        {brands.length > 0 && (
+          <div className="overflow-hidden">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">Popular Brands</h2>
+              <div className="flex items-center gap-4">
+                <div className="hidden md:flex gap-2 opacity-0 group-hover/brands:opacity-100 transition-opacity">
+                  <button
+                    onClick={() => brandsScrollRef.current?.scrollBy({ left: -200, behavior: 'smooth' })}
+                    className="p-2 rounded-full bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition"
+                  >
+                    <ChevronLeft size={20} className="text-neutral-600 dark:text-neutral-300" />
+                  </button>
+                  <button
+                    onClick={() => brandsScrollRef.current?.scrollBy({ left: 200, behavior: 'smooth' })}
+                    className="p-2 rounded-full bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition"
+                  >
+                    <ChevronRight size={20} className="text-neutral-600 dark:text-neutral-300" />
+                  </button>
+                </div>
+                <Link href="/brands" className="text-sm text-neutral-400 hover:text-white transition-colors">View All Brands</Link>
+              </div>
+            </div>
+
+            <div className="relative w-full overflow-hidden group bg-white/5 rounded-3xl p-8 border border-white/5"
+              onMouseEnter={() => setIsBrandsPaused(true)}
+              onMouseLeave={() => setIsBrandsPaused(false)}
+            >
+              <div
+                ref={brandsScrollRef}
+                className="flex space-x-12 overflow-x-auto no-scrollbar scroll-smooth items-center"
+              >
+                {marqueeBrands.map((brand: any, idx: number) => (
+                  <div key={`${brand.id}-${idx}`} className="group/brand relative flex flex-col items-center space-y-3 min-w-[90px]">
+                    <div className="relative">
+                      <Link href={`/brand/${brand.id}`} className="block">
+                        <div className="w-20 h-20 bg-[#151515] rounded-2xl shadow-lg flex items-center justify-center border border-white/5 overflow-hidden group-hover/brand:border-[var(--color-primary)] group-hover/brand:shadow-[0_0_20px_rgba(var(--color-primary),0.3)] transition-all duration-500">
+                          {brand.logo ? (
+                            <img
+                              src={brand.logo_url || `${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${brand.logo}`}
+                              alt={brand.name}
+                              className="w-[80%] h-[80%] object-contain transition-all duration-500"
+                            />
+                          ) : (
+                            <span className="text-2xl font-bold text-neutral-600 group-hover/brand:text-white">{brand.name.charAt(0)}</span>
+                          )}
+                        </div>
+                      </Link>
+                      <div className="absolute -top-2 -right-2 opacity-0 group-hover/brand:opacity-100 transition-opacity duration-300 z-10">
+                        <SubscribeToggle id={brand.id} type="brand" className="shadow-lg bg-neutral-800 border border-neutral-700 w-8 h-8 flex items-center justify-center !p-0 hover:bg-[var(--color-primary)]" />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Fades for marquee */}
+              <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[#111] to-transparent pointer-events-none" />
+              <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-[#111] to-transparent pointer-events-none" />
+            </div>
+          </div>
+        )}
+      </section>
+
       {/* Scrolling Banners (Trending Promotions) */}
       {scrollingBanners.length > 0 && (
         <section className="py-12 border-b border-neutral-200 dark:border-white/5 overflow-hidden group/trending">
@@ -182,25 +256,44 @@ export default function Home() {
 
       {/* Featured Offers Marquee */}
       {featuredOffers.length > 0 && (
-        <section className="py-16 relative bg-neutral-50 dark:bg-transparent">
+        <section className="py-16 relative bg-neutral-50 dark:bg-transparent group/featured">
           <div className="absolute top-0 left-0 w-full h-full dark:bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] dark:from-blue-900/10 dark:via-[#050505] dark:to-[#050505] pointer-events-none" />
-
           <div className="container mx-auto px-6 mb-8 relative z-10 flex justify-between items-end">
             <div>
               <h2 className="text-3xl font-bold text-neutral-900 dark:text-white mb-2">Featured Offers</h2>
               <p className="text-neutral-600 dark:text-neutral-400">Hand-picked deals you shouldn't miss</p>
             </div>
-            <Link href="/offers" className="text-[var(--color-primary)] font-semibold hover:text-inherit transition-colors flex items-center gap-2">
-              View All <span className="text-lg">→</span>
-            </Link>
+            <div className="flex items-center gap-4">
+              <div className="hidden md:flex gap-2 opacity-0 group-hover/featured:opacity-100 transition-opacity">
+                <button
+                  onClick={() => featuredScrollRef.current?.scrollBy({ left: -300, behavior: 'smooth' })}
+                  className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition"
+                >
+                  <ChevronLeft size={24} />
+                </button>
+                <button
+                  onClick={() => featuredScrollRef.current?.scrollBy({ left: 300, behavior: 'smooth' })}
+                  className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition"
+                >
+                  <ChevronRight size={24} />
+                </button>
+              </div>
+              <Link href="/offers" className="text-[var(--color-primary)] font-semibold hover:text-inherit transition-colors flex items-center gap-2">
+                View All <span className="text-lg">→</span>
+              </Link>
+            </div>
           </div>
 
-          <div className="relative w-full overflow-hidden group z-10">
-            <div className={shouldAnimateFeatured
-              ? "flex space-x-6 animate-marquee w-max hover:[animation-play-state:paused] px-4"
-              : "flex space-x-6 px-4 overflow-x-auto no-scrollbar justify-center"
-            }>
-              {marqueeOffers.map((offer: any, idx: number) => (
+          <div className="relative w-full z-10"
+            onMouseEnter={() => setIsFeaturedPaused(true)}
+            onMouseLeave={() => setIsFeaturedPaused(false)}
+          >
+            <div
+              id="featured-scroll"
+              ref={featuredScrollRef}
+              className="flex space-x-6 px-4 overflow-x-auto no-scrollbar scroll-smooth pb-4"
+            >
+              {featuredOffers.map((offer: any, idx: number) => (
                 <div key={`${offer.id}-${idx}`} className="w-[300px] flex-shrink-0">
                   <Link href={`/offer/${offer.id}`} className="block transform hover:-translate-y-2 transition duration-500">
                     <OfferCard
@@ -312,48 +405,7 @@ export default function Home() {
 
       </section>
 
-      <section className="container mx-auto px-6 py-12 border-t border-neutral-200 dark:border-white/5">
-        {/* Brands Section (Marquee) */}
-        {brands.length > 0 && (
-          <div className="overflow-hidden">
-            <div className="flex justify-between items-end mb-6">
-              <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">Popular Brands</h2>
-              <Link href="/brands" className="text-sm text-neutral-400 hover:text-white transition-colors">View All Brands</Link>
-            </div>
 
-            <div className="relative w-full overflow-hidden group bg-white/5 rounded-3xl p-8 border border-white/5">
-              <div className="flex space-x-12 animate-marquee w-max hover:[animation-play-state:paused] items-center">
-                {marqueeBrands.map((brand: any, idx: number) => (
-                  <div key={`${brand.id}-${idx}`} className="group/brand relative flex flex-col items-center space-y-3 min-w-[90px]">
-                    <div className="relative">
-                      <Link href={`/brand/${brand.id}`} className="block">
-                        <div className="w-20 h-20 bg-[#151515] rounded-2xl shadow-lg flex items-center justify-center border border-white/5 overflow-hidden group-hover/brand:border-[var(--color-primary)] group-hover/brand:shadow-[0_0_20px_rgba(var(--color-primary),0.3)] transition-all duration-500">
-                          {brand.logo ? (
-                            <img
-                              src={brand.logo_url || `${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${brand.logo}`}
-                              alt={brand.name}
-                              className="w-[80%] h-[80%] object-contain transition-all duration-500"
-                            />
-                          ) : (
-                            <span className="text-2xl font-bold text-neutral-600 group-hover/brand:text-white">{brand.name.charAt(0)}</span>
-                          )}
-                        </div>
-                      </Link>
-                      <div className="absolute -top-2 -right-2 opacity-0 group-hover/brand:opacity-100 transition-opacity duration-300 z-10">
-                        <SubscribeToggle id={brand.id} type="brand" className="shadow-lg bg-neutral-800 border border-neutral-700 w-8 h-8 flex items-center justify-center !p-0 hover:bg-[var(--color-primary)]" />
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Fades for marquee */}
-              <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[#111] to-transparent pointer-events-none" />
-              <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-[#111] to-transparent pointer-events-none" />
-            </div>
-          </div>
-        )}
-      </section>
 
       {/* Footer (Premium) */}
       <footer className="bg-neutral-100 dark:bg-black border-t border-neutral-200 dark:border-white/10 pt-20 pb-10 transition-colors duration-300">
