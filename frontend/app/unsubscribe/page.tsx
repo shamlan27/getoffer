@@ -4,38 +4,62 @@ import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import axios from '@/lib/axios';
 import Link from 'next/link';
-import { CheckCircle, XCircle, Loader2 } from 'lucide-react';
+import { CheckCircle, XCircle, Loader2, Info } from 'lucide-react';
 
 function UnsubscribeContent() {
     const searchParams = useSearchParams();
     const token = searchParams.get('token');
-    const [status, setStatus] = useState<'idle' | 'processing' | 'success' | 'error'>('idle');
+    const [status, setStatus] = useState<'idle' | 'confirming' | 'processing' | 'success' | 'error'>('confirming');
     const [message, setMessage] = useState('');
 
     useEffect(() => {
         if (!token) {
             setStatus('error');
             setMessage('Invalid or missing unsubscribe token.');
-            return;
         }
-
-        const unsubscribe = async () => {
-            setStatus('processing');
-            try {
-                await axios.post('/api/unsubscribe', { token });
-                setStatus('success');
-            } catch (err: any) {
-                setStatus('error');
-                setMessage(err.response?.data?.message || 'Failed to unsubscribe. Please try again.');
-            }
-        };
-
-        unsubscribe();
     }, [token]);
+
+    const handleUnsubscribe = async () => {
+        setStatus('processing');
+        try {
+            await axios.post('/api/unsubscribe', { token });
+            setStatus('success');
+        } catch (err: any) {
+            setStatus('error');
+            setMessage(err.response?.data?.message || 'Failed to unsubscribe. Please try again.');
+        }
+    };
 
     return (
         <div className="min-h-[60vh] flex items-center justify-center p-4">
             <div className="bg-white dark:bg-neutral-900 rounded-2xl p-8 max-w-md w-full shadow-xl border border-neutral-100 dark:border-neutral-800 text-center">
+
+                {status === 'confirming' && (
+                    <div className="flex flex-col items-center">
+                        <div className="w-16 h-16 bg-yellow-100 dark:bg-yellow-900/30 rounded-full flex items-center justify-center mb-6">
+                            <Info className="w-8 h-8 text-yellow-600 dark:text-yellow-400" />
+                        </div>
+                        <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-2">Confirm Unsubscribe</h2>
+                        <p className="text-neutral-600 dark:text-neutral-400 mb-8">
+                            Are you sure you want to stop receiving updates and offers from us?
+                        </p>
+                        <div className="flex flex-col space-y-3 w-full">
+                            <button
+                                onClick={handleUnsubscribe}
+                                className="bg-red-500 text-white px-8 py-3 rounded-full font-bold hover:bg-red-600 transition w-full"
+                            >
+                                Yes, Unsubscribe Me
+                            </button>
+                            <Link
+                                href="/"
+                                className="bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white px-8 py-3 rounded-full font-bold hover:bg-neutral-200 dark:hover:bg-neutral-700 transition w-full"
+                            >
+                                Cancel & Return Home
+                            </Link>
+                        </div>
+                    </div>
+                )}
+
                 {status === 'processing' && (
                     <div className="flex flex-col items-center">
                         <Loader2 className="w-12 h-12 text-[var(--color-primary)] animate-spin mb-4" />
