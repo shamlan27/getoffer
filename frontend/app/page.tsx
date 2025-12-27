@@ -278,7 +278,7 @@ export default function Home() {
       {/* Featured Offers Marquee */}
       {featuredOffers.length > 0 && (
         <section className="py-16 relative bg-[#000000] group/featured">
-          <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/10 via-[#000000] to-[#000000] pointer-events-none" />
+
           <div className="container mx-auto px-6 mb-8 relative z-10 flex justify-between items-end">
             <div>
               <h2 className="text-3xl font-bold text-neutral-900 dark:text-white mb-2">Featured Offers</h2>
