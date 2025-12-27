@@ -91,7 +91,7 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: color-mix(in srgb, var(--foreground) 20%, transparent);
+  background: #222;
   border-radius: 4px;
 }
 
@@ -106,12 +106,12 @@ body {
 
 .glass-nav {
   background: var(--background);
-  border-bottom: 1px solid color-mix(in srgb, var(--foreground) 10%, transparent);
+  border-bottom: 1px solid #111;
 }
 
 .glass-card {
   background: #000000;
-  border: 1px solid color-mix(in srgb, var(--foreground) 10%, transparent);
+  border: 1px solid #111;
   box-shadow: none;
 }
 
