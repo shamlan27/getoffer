@@ -13,6 +13,45 @@ import { Facebook, Instagram, Twitter, Linkedin, Youtube, ChevronLeft, ChevronRi
 
 const fetcher = (url: string) => axios.get(url).then(res => res.data);
 
+// Helper for auto-scrolling
+const useAutoScroll = (ref: any, isPaused: boolean) => {
+  const animationRef = useRef<number | null>(null);
+  // We use a ref to track precise scroll position to allow for sub-pixel scrolling speeds (e.g. 0.5px/frame)
+  // However, since scrollLeft is integer-based in most browsers, we just add a small amount each frame
+  // and rely on the high framerate for smoothness.
+
+  useEffect(() => {
+    const scrollContainer = ref.current;
+    if (!scrollContainer) return;
+
+    const animate = () => {
+      if (!scrollContainer) return;
+
+      // Move 1px every frame (approx 60px/sec at 60fps)
+      // If this is too fast, we can use an accumulator.
+      // Let's try 0.5 speed essentially by running every other frame or using accumulator.
+      // Simple smooth scroll:
+      if (scrollContainer.scrollLeft + scrollContainer.clientWidth >= scrollContainer.scrollWidth - 1) {
+        scrollContainer.scrollTo({ left: 0, behavior: 'auto' });
+      } else {
+        scrollContainer.scrollLeft += 1;
+      }
+
+      animationRef.current = requestAnimationFrame(animate);
+    };
+
+    if (!isPaused) {
+      animationRef.current = requestAnimationFrame(animate);
+    } else {
+      if (animationRef.current !== null) cancelAnimationFrame(animationRef.current);
+    }
+
+    return () => {
+      if (animationRef.current !== null) cancelAnimationFrame(animationRef.current);
+    };
+  }, [isPaused, ref]);
+};
+
 export default function Home() {
   const searchParams = useSearchParams();
   const search = searchParams.get('search');
@@ -27,45 +66,6 @@ export default function Home() {
 
   const [isBrandsPaused, setIsBrandsPaused] = useState(false);
   const brandsScrollRef = useRef<HTMLDivElement>(null);
-
-  // Helper for auto-scrolling
-  const useAutoScroll = (ref: any, isPaused: boolean) => {
-    const animationRef = useRef<number>();
-    // We use a ref to track precise scroll position to allow for sub-pixel scrolling speeds (e.g. 0.5px/frame)
-    // However, since scrollLeft is integer-based in most browsers, we just add a small amount each frame
-    // and rely on the high framerate for smoothness.
-
-    useEffect(() => {
-      const scrollContainer = ref.current;
-      if (!scrollContainer) return;
-
-      const animate = () => {
-        if (!scrollContainer) return;
-
-        // Move 1px every frame (approx 60px/sec at 60fps)
-        // If this is too fast, we can use an accumulator.
-        // Let's try 0.5 speed essentially by running every other frame or using accumulator.
-        // Simple smooth scroll:
-        if (scrollContainer.scrollLeft + scrollContainer.clientWidth >= scrollContainer.scrollWidth - 1) {
-          scrollContainer.scrollTo({ left: 0, behavior: 'auto' });
-        } else {
-          scrollContainer.scrollLeft += 1;
-        }
-
-        animationRef.current = requestAnimationFrame(animate);
-      };
-
-      if (!isPaused) {
-        animationRef.current = requestAnimationFrame(animate);
-      } else {
-        if (animationRef.current) cancelAnimationFrame(animationRef.current);
-      }
-
-      return () => {
-        if (animationRef.current) cancelAnimationFrame(animationRef.current);
-      };
-    }, [isPaused, ref]);
-  };
 
   useAutoScroll(trendingScrollRef, isTrendingPaused);
   useAutoScroll(featuredScrollRef, isFeaturedPaused);
@@ -135,7 +135,7 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-white dark:bg-[#050505] transition-colors duration-300">
+    <main className="min-h-screen bg-[#050505] text-white">
       {heroBanners.length > 0 ? (
         <HeroSlider banners={heroBanners} />
       ) : (
@@ -143,7 +143,7 @@ export default function Home() {
       )}
 
       {/* Stats Bar */}
-      <section className="bg-neutral-100/50 dark:bg-neutral-900/50 border-y border-neutral-200 dark:border-white/5 py-4 backdrop-blur-sm">
+      <section className="bg-[#0A0A0A] border-y border-white/5 py-4 backdrop-blur-sm">
         <div className="container mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
           {[
             { label: 'Active Deals', value: '500+' },
@@ -277,8 +277,8 @@ export default function Home() {
 
       {/* Featured Offers Marquee */}
       {featuredOffers.length > 0 && (
-        <section className="py-16 relative bg-neutral-50 dark:bg-transparent group/featured">
-          <div className="absolute top-0 left-0 w-full h-full dark:bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] dark:from-blue-900/10 dark:via-[#050505] dark:to-[#050505] pointer-events-none" />
+        <section className="py-16 relative bg-[#050505] group/featured">
+          <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/10 via-[#050505] to-[#050505] pointer-events-none" />
           <div className="container mx-auto px-6 mb-8 relative z-10 flex justify-between items-end">
             <div>
               <h2 className="text-3xl font-bold text-neutral-900 dark:text-white mb-2">Featured Offers</h2>
@@ -429,7 +429,7 @@ export default function Home() {
 
 
       {/* Footer (Premium) */}
-      <footer className="bg-neutral-100 dark:bg-black border-t border-neutral-200 dark:border-white/10 pt-20 pb-10 transition-colors duration-300">
+      <footer className="bg-[#050505] border-t border-white/10 pt-20 pb-10">
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
             <div className="col-span-1 md:col-span-2 space-y-6">

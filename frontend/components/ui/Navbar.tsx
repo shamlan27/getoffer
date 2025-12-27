@@ -46,7 +46,7 @@ export default function Navbar() {
     return (
         <>
             <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'glass-nav py-4' : 'bg-transparent py-6'}`}>
-                <div className="container mx-auto px-6 flex justify-between items-center text-neutral-900 dark:text-white transition-colors">
+                <div className="container mx-auto px-6 flex justify-between items-center text-white transition-colors">
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-2 z-50 group">
                         <Image src="/logo.png" alt="GetOffer Logo" width={40} height={40} className="object-contain" priority />
@@ -56,12 +56,12 @@ export default function Navbar() {
                     </Link>
 
                     {/* Desktop Nav */}
-                    <nav className="hidden md:flex items-center space-x-1 bg-white/80 dark:bg-white/5 backdrop-blur-md rounded-full px-2 py-1.5 border border-neutral-200 dark:border-white/10 shadow-sm dark:shadow-none">
+                    <nav className="hidden md:flex items-center space-x-1 bg-white/5 backdrop-blur-md rounded-full px-2 py-1.5 border border-white/10 shadow-none">
                         {['Home', 'Offers', 'Brands', 'Categories'].map((item) => (
                             <Link
                                 key={item}
                                 href={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
-                                className="px-5 py-2 rounded-full text-sm font-medium text-neutral-600 dark:text-neutral-300 hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10 transition-all"
+                                className="px-5 py-2 rounded-full text-sm font-medium text-neutral-300 hover:text-white hover:bg-white/10 transition-all"
                             >
                                 {item}
                             </Link>
@@ -71,11 +71,11 @@ export default function Navbar() {
                     {/* Right Actions */}
                     <div className="hidden md:flex items-center gap-2">
                         <GlobalSearch />
-                        <div className="h-6 w-[1px] bg-neutral-200 dark:bg-white/10 mx-2" />
+                        <div className="h-6 w-[1px] bg-white/10 mx-2" />
 
 
 
-                        <Link href="/contact" className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white transition mr-4">Contact</Link>
+                        <Link href="/contact" className="text-sm text-neutral-400 hover:text-white transition mr-4">Contact</Link>
 
                         {user ? (
                             <div className="flex items-center space-x-3">

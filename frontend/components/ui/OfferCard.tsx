@@ -60,7 +60,7 @@ export default function OfferCard({ brand, description, code, expiry, verified, 
     return (
         <motion.div
             whileHover={{ y: -5 }}
-            className={`group relative bg-white dark:bg-[#111] rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-800 p-5 overflow-hidden transition-all duration-300 hover:shadow-2xl hover:border-[var(--color-primary)]/50 h-full flex flex-col ${status === 'expired' ? 'opacity-60 grayscale' : ''}`}
+            className={`group relative bg-[#111] rounded-2xl shadow-sm border border-neutral-800 p-5 overflow-hidden transition-all duration-300 hover:shadow-2xl hover:border-[var(--color-primary)]/50 h-full flex flex-col ${status === 'expired' ? 'opacity-60 grayscale' : ''}`}
         >
             {/* Expiry Badge */}
             {status === 'expiring' && (
@@ -72,7 +72,7 @@ export default function OfferCard({ brand, description, code, expiry, verified, 
             {/* Top Badge */}
             <div className="flex justify-between items-center mb-4">
                 <div className="flex items-center space-x-3">
-                    <div className="relative w-10 h-10 bg-white dark:bg-neutral-800 rounded-full flex items-center justify-center text-lg font-bold text-neutral-500 shadow-sm overflow-hidden border border-neutral-100 dark:border-neutral-700">
+                    <div className="relative w-10 h-10 bg-neutral-800 rounded-full flex items-center justify-center text-lg font-bold text-neutral-500 shadow-sm overflow-hidden border border-neutral-700">
                         {logo ? (
                             <Image
                                 src={logo}
@@ -85,11 +85,11 @@ export default function OfferCard({ brand, description, code, expiry, verified, 
                         )}
                     </div>
                     <div>
-                        <h3 className="text-sm font-bold text-neutral-900 dark:text-neutral-100 group-hover:text-[var(--color-primary)] transition line-clamp-1">
+                        <h3 className="text-sm font-bold text-neutral-100 group-hover:text-[var(--color-primary)] transition line-clamp-1">
                             {brand}
                         </h3>
                         {verified && (
-                            <div className="flex items-center text-[10px] font-medium text-green-600 dark:text-green-400">
+                            <div className="flex items-center text-[10px] font-medium text-green-400">
                                 <CheckCircle className="w-3 h-3 mr-1" /> Verified
                             </div>
                         )}
@@ -98,7 +98,7 @@ export default function OfferCard({ brand, description, code, expiry, verified, 
             </div>
 
             {image && variant !== 'compact' && (
-                <div className={`relative mb-4 rounded-lg overflow-hidden w-full bg-neutral-100 dark:bg-neutral-800 ${variant === 'featured' ? 'h-40' : 'h-32'}`}>
+                <div className={`relative mb-4 rounded-lg overflow-hidden w-full bg-neutral-800 ${variant === 'featured' ? 'h-40' : 'h-32'}`}>
                     <Image
                         src={image}
                         alt={description}
@@ -109,7 +109,7 @@ export default function OfferCard({ brand, description, code, expiry, verified, 
                 </div>
             )}
 
-            <p className="text-neutral-700 dark:text-neutral-300 text-base font-semibold mb-2 line-clamp-2 leading-tight flex-grow">
+            <p className="text-neutral-300 text-base font-semibold mb-2 line-clamp-2 leading-tight flex-grow">
                 {description}
             </p>
 
@@ -127,7 +127,7 @@ export default function OfferCard({ brand, description, code, expiry, verified, 
                             onClick={(e) => { e.preventDefault(); handleCopy(); }}
                             className={`flex items-center justify-center space-x-2 px-3 py-2 rounded-lg font-bold text-xs transition-colors flex-1 max-w-[140px] ${copied
                                 ? 'bg-green-500 text-white'
-                                : 'bg-neutral-100 dark:bg-neutral-800 hover:bg-[var(--color-primary)] hover:text-white text-neutral-900 dark:text-neutral-200'
+                                : 'bg-neutral-800 hover:bg-[var(--color-primary)] hover:text-white text-neutral-200'
                                 }`}
                         >
                             {copied ? (

@@ -7,28 +7,18 @@
 @variant dark (&:where(.dark, .dark *));
 
 :root {
-  /* Light Mode Defaults */
-  --background: #ffffff;
-  --foreground: #171717;
-
-  /* Brand Colors (Light) */
-  --color-primary: #0F4C81;
-  --color-primary-glow: rgba(15, 76, 129, 0.2);
-  --color-secondary: #F58220;
-  --color-accent: #F58220;
-}
-
-/* Dark Mode Overrides */
-.dark {
+  /* Enforce Dark Mode Defaults Globally */
   --background: #050505;
   --foreground: #ffffff;
 
-  /* Brand Colors (Dark) */
+  /* Brand Colors */
   --color-primary: #0F4C81;
   --color-primary-glow: rgba(15, 76, 129, 0.5);
   --color-secondary: #F58220;
   --color-accent: #F58220;
 }
+
+/* Remove separate .dark rules since we are enforcing darkness */
 
 @theme inline {
   --color-background: var(--background);
@@ -85,7 +75,8 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), 'Inter', sans-serif;
-  antialiased: true;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
 
@@ -133,12 +124,14 @@ body {
 
 .text-gradient {
   background: linear-gradient(to right, var(--foreground), color-mix(in srgb, var(--foreground) 70%, transparent));
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .text-gradient-primary {
   background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }

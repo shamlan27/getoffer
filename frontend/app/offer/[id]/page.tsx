@@ -46,10 +46,10 @@ export default function OfferDetail() {
     if (!offer) return <GlobalLoader />;
 
     return (
-        <main className="min-h-screen bg-gray-50 dark:bg-black p-4 md:p-8 pt-32 md:pt-24 pb-20 relative">
+        <main className="min-h-screen bg-[#050505] text-white p-4 md:p-8 pt-32 md:pt-24 pb-20 relative">
             {/* Back Button */}
             <div className="max-w-4xl mx-auto mb-6 relative z-10">
-                <Link href="/" className="inline-flex items-center text-neutral-600 dark:text-neutral-400 hover:text-[var(--color-primary)] transition py-2">
+                <Link href="/" className="inline-flex items-center text-neutral-400 hover:text-[var(--color-primary)] transition py-2">
                     <ArrowLeft className="w-4 h-4 mr-2" /> Back to Home
                 </Link>
             </div>
@@ -57,11 +57,11 @@ export default function OfferDetail() {
             <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
                 {/* Main Content */}
                 <div className="md:col-span-2 space-y-6">
-                    <div className="bg-white dark:bg-neutral-900 rounded-3xl p-8 shadow-xl border border-neutral-100 dark:border-neutral-800 relative overflow-hidden">
+                    <div className="bg-[#111] rounded-3xl p-8 shadow-xl border border-neutral-800 relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--color-primary)] opacity-10 rounded-bl-full pointer-events-none" />
 
                         <div className="flex items-center space-x-4 mb-6">
-                            <div className="w-16 h-16 bg-white dark:bg-neutral-800 rounded-full flex items-center justify-center shadow-lg border border-neutral-200 dark:border-neutral-700 overflow-hidden">
+                            <div className="w-16 h-16 bg-[#1A1A1A] rounded-full flex items-center justify-center shadow-lg border border-neutral-700 overflow-hidden">
                                 {offer.brand?.logo || offer.brand?.logo_url ? (
                                     <img
                                         src={offer.brand.logo_url || `${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${offer.brand.logo}`}
@@ -75,19 +75,19 @@ export default function OfferDetail() {
                                 )}
                             </div>
                             <div>
-                                <h1 className="text-3xl font-bold text-neutral-900 dark:text-white">{offer.brand?.name}</h1>
+                                <h1 className="text-3xl font-bold text-white">{offer.brand?.name}</h1>
                                 <div className="flex items-center text-green-500 text-sm font-medium mt-1">
                                     <ShieldCheck className="w-4 h-4 mr-1" /> Verified Offer
                                 </div>
                             </div>
                         </div>
 
-                        <h2 className="text-2xl font-bold mb-4 text-neutral-800 dark:text-neutral-200">{offer.title}</h2>
-                        <div className="text-neutral-600 dark:text-neutral-400 leading-relaxed mb-8 prose dark:prose-invert" dangerouslySetInnerHTML={{ __html: offer.description }} />
+                        <h2 className="text-2xl font-bold mb-4 text-white">{offer.title}</h2>
+                        <div className="text-neutral-400 leading-relaxed mb-8 prose prose-invert" dangerouslySetInnerHTML={{ __html: offer.description }} />
 
                         {/* Coupon Section */}
                         {offer.type === 'code' ? (
-                            <div className="bg-neutral-50 dark:bg-neutral-950 border-2 border-dashed border-[var(--color-primary)] rounded-xl p-6 flex flex-col items-center justify-center text-center relative transition-all hover:bg-purple-50 dark:hover:bg-neutral-900">
+                            <div className="bg-[#050505] border-2 border-dashed border-[var(--color-primary)] rounded-xl p-6 flex flex-col items-center justify-center text-center relative transition-all hover:bg-neutral-900">
                                 <span className="text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-2">Coupon Code</span>
                                 <div className="text-3xl md:text-4xl font-mono font-bold text-[var(--color-primary)] mb-4 tracking-wider">
                                     {offer.code}
@@ -101,8 +101,8 @@ export default function OfferDetail() {
                                 </button>
                             </div>
                         ) : (
-                            <div className="bg-neutral-50 dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-xl p-6 flex flex-col items-center justify-center text-center">
-                                <span className="text-lg font-bold text-neutral-800 dark:text-white mb-4">No Code Required</span>
+                            <div className="bg-[#050505] border border-neutral-800 rounded-xl p-6 flex flex-col items-center justify-center text-center">
+                                <span className="text-lg font-bold text-white mb-4">No Code Required</span>
                                 <a href={offer.brand?.website || '#'} target="_blank" className="bg-[var(--color-secondary)] text-white px-8 py-3 rounded-full font-bold hover:opacity-90 transition flex items-center shadow-lg">
                                     Get Deal <ExternalLink className="w-4 h-4 ml-2" />
                                 </a>
@@ -125,12 +125,12 @@ export default function OfferDetail() {
 
                     {/* How to Claim Image */}
                     {offer.how_to_claim_image && (
-                        <div className="bg-white dark:bg-neutral-900 rounded-2xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-800">
-                            <h3 className="font-bold text-lg mb-4 flex items-center">
+                        <div className="bg-[#111] rounded-2xl p-6 shadow-sm border border-neutral-800">
+                            <h3 className="font-bold text-lg mb-4 flex items-center text-white">
                                 <Info className="w-5 h-5 mr-2 text-[var(--color-primary)]" />
                                 How to Claim
                             </h3>
-                            <div className="rounded-xl overflow-hidden border border-neutral-200 dark:border-neutral-700">
+                            <div className="rounded-xl overflow-hidden border border-neutral-700">
                                 <img
                                     src={offer.how_to_claim_image_url || `${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${offer.how_to_claim_image}`}
                                     alt="How to claim instructions"
@@ -174,7 +174,7 @@ export default function OfferDetail() {
                         <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-white/10 rounded-full" />
                     </div>
 
-                    <div className="bg-white dark:bg-neutral-900 rounded-2xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-800">
+                    <div className="bg-[#111] rounded-2xl p-6 shadow-sm border border-neutral-800 text-white">
                         <h3 className="font-bold mb-4">Share this offer</h3>
                         <div className="flex space-x-2">
                             {['Facebook', 'WhatsApp', 'Twitter', 'Copy Link'].map(platform => (
@@ -196,7 +196,7 @@ export default function OfferDetail() {
                                             alert('Link copied to clipboard!');
                                         }
                                     }}
-                                    className="flex-1 bg-neutral-100 dark:bg-neutral-800 py-2 rounded-lg text-xs font-medium hover:bg-neutral-200 dark:hover:bg-neutral-700 transition"
+                                    className="flex-1 bg-neutral-800 py-2 rounded-lg text-xs font-medium hover:bg-neutral-700 transition"
                                 >
                                     {platform}
                                 </button>
