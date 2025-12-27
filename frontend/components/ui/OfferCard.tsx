@@ -60,7 +60,7 @@ export default function OfferCard({ brand, description, code, expiry, verified, 
     return (
         <motion.div
             whileHover={{ y: -5 }}
-            className={`group relative bg-[#111] rounded-2xl shadow-sm border border-neutral-800 p-5 overflow-hidden transition-all duration-300 hover:shadow-2xl hover:border-[var(--color-primary)]/50 h-full flex flex-col ${status === 'expired' ? 'opacity-60 grayscale' : ''}`}
+            className={`group relative bg-[#000000] rounded-2xl shadow-sm border border-neutral-800 p-5 overflow-hidden transition-all duration-300 hover:shadow-2xl hover:border-[var(--color-primary)]/50 h-full flex flex-col ${status === 'expired' ? 'opacity-60 grayscale' : ''}`}
         >
             {/* Expiry Badge */}
             {status === 'expiring' && (

@@ -46,7 +46,7 @@ export default function OfferDetail() {
     if (!offer) return <GlobalLoader />;
 
     return (
-        <main className="min-h-screen bg-[#050505] text-white p-4 md:p-8 pt-32 md:pt-24 pb-20 relative">
+        <main className="min-h-screen bg-[#000000] text-white p-4 md:p-8 pt-32 md:pt-24 pb-20 relative">
             {/* Back Button */}
             <div className="max-w-4xl mx-auto mb-6 relative z-10">
                 <Link href="/" className="inline-flex items-center text-neutral-400 hover:text-[var(--color-primary)] transition py-2">

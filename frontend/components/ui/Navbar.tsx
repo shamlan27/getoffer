@@ -45,7 +45,7 @@ export default function Navbar() {
 
     return (
         <>
-            <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'glass-nav py-4' : 'bg-transparent py-6'}`}>
+            <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-[#000000] border-b border-white/10 py-4' : 'bg-transparent py-6'}`}>
                 <div className="container mx-auto px-6 flex justify-between items-center text-white transition-colors">
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-2 z-50 group">
@@ -56,7 +56,7 @@ export default function Navbar() {
                     </Link>
 
                     {/* Desktop Nav */}
-                    <nav className="hidden md:flex items-center space-x-1 bg-white/5 backdrop-blur-md rounded-full px-2 py-1.5 border border-white/10 shadow-none">
+                    <nav className="hidden md:flex items-center space-x-1 bg-[#000000] rounded-full px-2 py-1.5 border border-white/10 shadow-none">
                         {['Home', 'Offers', 'Brands', 'Categories'].map((item) => (
                             <Link
                                 key={item}
@@ -114,7 +114,7 @@ export default function Navbar() {
 
                     {/* Mobile Nav Overlay */}
                     {isMenuOpen && (
-                        <div className="fixed inset-0 bg-[#050505] z-40 flex flex-col items-center justify-center space-y-8 animate-in fade-in zoom-in duration-300">
+                        <div className="fixed inset-0 bg-[#000000] z-40 flex flex-col items-center justify-center space-y-8 animate-in fade-in zoom-in duration-300">
                             <Link href="/" onClick={() => setIsMenuOpen(false)} className="text-2xl font-bold text-white">Home</Link>
                             <Link href="/offers" onClick={() => setIsMenuOpen(false)} className="text-2xl font-bold text-neutral-400 hover:text-white">Offers</Link>
                             <Link href="/brands" onClick={() => setIsMenuOpen(false)} className="text-2xl font-bold text-neutral-400 hover:text-white">Brands</Link>

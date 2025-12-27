@@ -135,7 +135,7 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-[#050505] text-white">
+    <main className="min-h-screen bg-[#000000] text-white">
       {heroBanners.length > 0 ? (
         <HeroSlider banners={heroBanners} />
       ) : (
@@ -143,7 +143,7 @@ export default function Home() {
       )}
 
       {/* Stats Bar */}
-      <section className="bg-[#0A0A0A] border-y border-white/5 py-4 backdrop-blur-sm">
+      <section className="bg-[#000000] border-y border-white/5 py-4">
         <div className="container mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
           {[
             { label: 'Active Deals', value: '500+' },
@@ -277,7 +277,7 @@ export default function Home() {
 
       {/* Featured Offers Marquee */}
       {featuredOffers.length > 0 && (
-        <section className="py-16 relative bg-[#050505] group/featured">
+        <section className="py-16 relative bg-[#000000] group/featured">
           <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/10 via-[#050505] to-[#050505] pointer-events-none" />
           <div className="container mx-auto px-6 mb-8 relative z-10 flex justify-between items-end">
             <div>
@@ -429,7 +429,7 @@ export default function Home() {
 
 
       {/* Footer (Premium) */}
-      <footer className="bg-[#050505] border-t border-white/10 pt-20 pb-10">
+      <footer className="bg-[#000000] border-t border-white/10 pt-20 pb-10">
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
             <div className="col-span-1 md:col-span-2 space-y-6">
