@@ -1,8 +1,33 @@
 @import "tailwindcss";
 
+/* 
+  Enable Class-based Dark Mode for Tailwind v4 
+  This overrides the default media-query behavior using a custom variant.
+*/
+@variant dark (&:where(.dark, .dark *));
+
 :root {
+  /* Light Mode Defaults */
   --background: #ffffff;
   --foreground: #171717;
+
+  /* Brand Colors (Light) */
+  --color-primary: #0F4C81;
+  --color-primary-glow: rgba(15, 76, 129, 0.2);
+  --color-secondary: #F58220;
+  --color-accent: #F58220;
+}
+
+/* Dark Mode Overrides */
+.dark {
+  --background: #050505;
+  --foreground: #ffffff;
+
+  /* Brand Colors (Dark) */
+  --color-primary: #0F4C81;
+  --color-primary-glow: rgba(15, 76, 129, 0.5);
+  --color-secondary: #F58220;
+  --color-accent: #F58220;
 }
 
 @theme inline {
@@ -11,12 +36,10 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 
-  --color-primary: oklch(0.55 0.25 270);
-  /* Vibrant Purple */
-  --color-secondary: oklch(0.65 0.2 30);
-  /* Warm Orange */
-  --color-accent: oklch(0.85 0.15 80);
-  /* Gold/Yellow */
+  --color-primary: var(--color-primary);
+  --color-primary-glow: var(--color-primary-glow);
+  --color-secondary: var(--color-secondary);
+  --color-accent: var(--color-accent);
 
   --animate-gradient: gradient 8s linear infinite;
   --animate-float: float 6s ease-in-out infinite;
@@ -56,28 +79,75 @@
       transform: translateX(-50%);
     }
   }
-
-
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), 'Inter', sans-serif;
   antialiased: true;
+  overflow-x: hidden;
 }
 
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--foreground) 20%, transparent);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-secondary);
+}
+
+/* Utilities */
 .animate-marquee {
-  animation: marquee 25s linear infinite;
+  animation: marquee 40s linear infinite;
+}
+
+.glass-nav {
+  background: color-mix(in srgb, var(--background) 85%, transparent);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid color-mix(in srgb, var(--foreground) 5%, transparent);
 }
 
 .glass-card {
-  background: rgba(255, 255, 255, 0.1);
+  background: color-mix(in srgb, var(--foreground) 3%, transparent);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid color-mix(in srgb, var(--foreground) 5%, transparent);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 }
 
-.dark .glass-card {
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+.glass-card:hover {
+  background: color-mix(in srgb, var(--foreground) 6%, transparent);
+  border-color: color-mix(in srgb, var(--foreground) 10%, transparent);
+}
+
+.text-gradient {
+  background: linear-gradient(to right, var(--foreground), color-mix(in srgb, var(--foreground) 70%, transparent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-primary {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

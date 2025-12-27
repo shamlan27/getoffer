@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Copy, ExternalLink, Clock, CheckCircle, Timer } from 'lucide-react';
+import { Copy, ExternalLink, Clock, CheckCircle, Timer, AlertCircle } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 interface OfferProps {
@@ -12,12 +12,13 @@ interface OfferProps {
     logo?: string;
     image?: string;
     verified?: boolean;
-    variant?: 'default' | 'featured';
+    variant?: 'default' | 'featured' | 'compact';
 }
 
 export default function OfferCard({ brand, description, code, expiry, verified, logo, image, variant = 'default' }: OfferProps) {
     const [copied, setCopied] = useState(false);
     const [timeLeft, setTimeLeft] = useState('');
+    const [status, setStatus] = useState<'active' | 'expiring' | 'expired'>('active');
 
     useEffect(() => {
         if (!expiry) return;
@@ -29,9 +30,13 @@ export default function OfferCard({ brand, description, code, expiry, verified, 
                 const days = Math.floor(difference / (1000 * 60 * 60 * 24));
                 const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
 
+                if (days < 3) setStatus('expiring');
+                else setStatus('active');
+
                 if (days > 0) return `${days}d ${hours}h left`;
                 return `${hours}h ${Math.floor((difference / 1000 / 60) % 60)}m left`;
             }
+            setStatus('expired');
             return 'Expired';
         };
 
@@ -54,73 +59,87 @@ export default function OfferCard({ brand, description, code, expiry, verified, 
     return (
         <motion.div
             whileHover={{ y: -5 }}
-            className="group relative bg-white dark:bg-neutral-900 rounded-2xl shadow-lg border border-neutral-200 dark:border-neutral-800 p-6 overflow-hidden transition-all duration-300 hover:shadow-2xl h-full flex flex-col"
+            className={`group relative bg-white dark:bg-[#111] rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-800 p-5 overflow-hidden transition-all duration-300 hover:shadow-2xl hover:border-[var(--color-primary)]/50 h-full flex flex-col ${status === 'expired' ? 'opacity-60 grayscale' : ''}`}
         >
-            {/* Top Badge */}
-            <div className="flex justify-between items-start mb-4">
-                <div className="w-12 h-12 bg-neutral-100 dark:bg-neutral-800 rounded-full flex items-center justify-center text-xl font-bold text-neutral-500 shadow-sm overflow-hidden">
-                    {logo ? (
-                        <img
-                            src={logo}
-                            alt={brand}
-                            className="w-full h-full object-cover"
-                        />
-                    ) : (
-                        brand.substring(0, 1)
-                    )}
-                </div>
-                {verified && (
-                    <span className="flex items-center text-xs font-semibold text-green-600 bg-green-100 px-2 py-1 rounded-full">
-                        <CheckCircle className="w-3 h-3 mr-1" /> Verified
-                    </span>
-                )}
-            </div>
-
-            {/* Content */}
-            <h3 className="text-xl font-bold text-neutral-900 dark:text-neutral-100 mb-2 group-hover:text-[var(--color-primary)] transition line-clamp-1">
-                {brand}
-            </h3>
-
-            {image && (
-                <div className={`mb-4 rounded-lg overflow-hidden w-full ${variant === 'featured' ? 'h-48' : 'h-32'}`}>
-                    <img src={image} alt={description} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+            {/* Expiry Badge */}
+            {status === 'expiring' && (
+                <div className="absolute top-0 right-0 bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded-bl-lg z-10">
+                    EXPIRING SOON
                 </div>
             )}
 
-            <p className="text-neutral-600 dark:text-neutral-400 text-sm mb-6 line-clamp-2 flex-grow">
+            {/* Top Badge */}
+            <div className="flex justify-between items-center mb-4">
+                <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 bg-white dark:bg-neutral-800 rounded-full flex items-center justify-center text-lg font-bold text-neutral-500 shadow-sm overflow-hidden border border-neutral-100 dark:border-neutral-700">
+                        {logo ? (
+                            <img
+                                src={logo}
+                                alt={brand}
+                                className="w-full h-full object-cover"
+                            />
+                        ) : (
+                            brand.substring(0, 1)
+                        )}
+                    </div>
+                    <div>
+                        <h3 className="text-sm font-bold text-neutral-900 dark:text-neutral-100 group-hover:text-[var(--color-primary)] transition line-clamp-1">
+                            {brand}
+                        </h3>
+                        {verified && (
+                            <div className="flex items-center text-[10px] font-medium text-green-600 dark:text-green-400">
+                                <CheckCircle className="w-3 h-3 mr-1" /> Verified
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+
+            {image && variant !== 'compact' && (
+                <div className={`mb-4 rounded-lg overflow-hidden w-full bg-neutral-100 dark:bg-neutral-800 ${variant === 'featured' ? 'h-40' : 'h-32'}`}>
+                    <img src={image} alt={description} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                </div>
+            )}
+
+            <p className="text-neutral-700 dark:text-neutral-300 text-base font-semibold mb-2 line-clamp-2 leading-tight flex-grow">
                 {description}
             </p>
 
             {/* Footer / Action */}
-            <div className="flex items-center justify-between mt-auto pt-4 border-t border-neutral-100 dark:border-neutral-800">
-                <div className={`flex items-center text-xs font-medium ${timeLeft === 'Expired' ? 'text-red-500' : 'text-orange-500'}`}>
-                    <Timer className="w-3 h-3 mr-1" /> {timeLeft || 'No expiry'}
+            <div className="mt-auto pt-4 border-t border-dashed border-neutral-200 dark:border-neutral-800">
+                <div className="flex items-center justify-between gap-3">
+                    <div className={`flex items-center text-xs font-medium whitespace-nowrap ${status === 'expired' ? 'text-red-500' :
+                            status === 'expiring' ? 'text-orange-500' : 'text-neutral-500 dark:text-neutral-400'
+                        }`}>
+                        <Timer className="w-3.5 h-3.5 mr-1.5" /> {timeLeft || 'No expiry'}
+                    </div>
+
+                    {code ? (
+                        <button
+                            onClick={(e) => { e.preventDefault(); handleCopy(); }}
+                            className={`flex items-center justify-center space-x-2 px-3 py-2 rounded-lg font-bold text-xs transition-colors flex-1 max-w-[140px] ${copied
+                                    ? 'bg-green-500 text-white'
+                                    : 'bg-neutral-100 dark:bg-neutral-800 hover:bg-[var(--color-primary)] hover:text-white text-neutral-900 dark:text-neutral-200'
+                                }`}
+                        >
+                            {copied ? (
+                                <span>Copied!</span>
+                            ) : (
+                                <>
+                                    <span className="truncate border-r border-current pr-2 mr-2 border-opacity-20">{code}</span>
+                                    <Copy className="w-3.5 h-3.5 flex-shrink-0" />
+                                </>
+                            )}
+                        </button>
+                    ) : (
+                        <button className="flex items-center justify-center space-x-2 bg-[var(--color-primary)] text-white px-4 py-2 rounded-lg font-bold text-xs hover:bg-opacity-90 transition flex-1 max-w-[120px]">
+                            <span>Get Deal</span>
+                            <ExternalLink className="w-3.5 h-3.5" />
+                        </button>
+                    )}
                 </div>
-
-                {code ? (
-                    <button
-                        onClick={(e) => { e.preventDefault(); handleCopy(); }}
-                        className="flex items-center space-x-2 bg-neutral-100 dark:bg-neutral-800 hover:bg-[var(--color-primary)] hover:text-white text-neutral-900 dark:text-neutral-200 px-4 py-2 rounded-lg font-medium transition-colors text-sm"
-                    >
-                        {copied ? (
-                            <span>Copied!</span>
-                        ) : (
-                            <>
-                                <span className="border-r border-current pr-2 mr-2 border-opacity-20">{code}</span>
-                                <Copy className="w-4 h-4" />
-                            </>
-                        )}
-                    </button>
-                ) : (
-                    <button className="flex items-center space-x-2 bg-[var(--color-secondary)] text-white px-4 py-2 rounded-lg font-medium hover:opacity-90 transition text-sm">
-                        <span>Get Deal</span>
-                        <ExternalLink className="w-4 h-4" />
-                    </button>
-                )}
             </div>
-
-            {/* Decoration */}
-            <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-accent)] opacity-5 rounded-bl-full pointer-events-none" />
         </motion.div>
     );
 }
+

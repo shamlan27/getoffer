@@ -37,8 +37,11 @@ export default function CategoriesPage() {
                         >
                             <div className="flex flex-col items-center space-y-4">
                                 <div className="w-16 h-16 rounded-full bg-[var(--color-primary)]/10 text-[var(--color-primary)] flex items-center justify-center text-2xl group-hover:bg-[var(--color-primary)] group-hover:text-white transition duration-300">
-                                    {/* If category has icon, use it. For now, first letter */}
-                                    {cat.name.charAt(0)}
+                                    {cat.icon && (cat.icon.startsWith('http') || cat.icon.startsWith('/')) ? (
+                                        <img src={cat.icon} alt="" className="w-10 h-10 object-contain" />
+                                    ) : (
+                                        <span className="text-3xl leading-none">{cat.icon || cat.name.charAt(0)}</span>
+                                    )}
                                 </div>
                                 <h3 className="text-lg font-bold group-hover:text-[var(--color-primary)] transition">{cat.name}</h3>
                             </div>

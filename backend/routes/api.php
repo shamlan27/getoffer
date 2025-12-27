@@ -25,6 +25,9 @@ Route::get('/brands', [BrandController::class, 'index']);
 Route::get('/brands/{id}', [BrandController::class, 'show']);
 Route::post('/subscribe', [SubscriptionController::class, 'subscribe']);
 
+Route::post('/subscribe/brand', [SubscriptionController::class, 'subscribeBrand']);
+Route::post('/subscribe/category', [SubscriptionController::class, 'subscribeCategory']);
+
 Route::post('/auth/verify-email', [AuthController::class, 'verifyEmail']);
 Route::post('/auth/forgot-password', [AuthController::class, 'forgotPassword']);
 Route::post('/auth/reset-password', [AuthController::class, 'resetPassword']);

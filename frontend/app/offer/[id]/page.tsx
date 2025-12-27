@@ -57,8 +57,18 @@ export default function OfferDetail() {
                         <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--color-primary)] opacity-10 rounded-bl-full pointer-events-none" />
 
                         <div className="flex items-center space-x-4 mb-6">
-                            <div className="w-16 h-16 bg-neutral-100 dark:bg-neutral-800 rounded-full flex items-center justify-center font-bold text-2xl shadow-lg border border-neutral-200 dark:border-neutral-700">
-                                {offer.brand?.name?.substring(0, 1) || 'B'}
+                            <div className="w-16 h-16 bg-white dark:bg-neutral-800 rounded-full flex items-center justify-center shadow-lg border border-neutral-200 dark:border-neutral-700 overflow-hidden">
+                                {offer.brand?.logo || offer.brand?.logo_url ? (
+                                    <img
+                                        src={offer.brand.logo_url || `${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${offer.brand.logo}`}
+                                        alt={offer.brand.name}
+                                        className="w-full h-full object-contain p-2"
+                                    />
+                                ) : (
+                                    <span className="font-bold text-2xl text-[var(--color-primary)]">
+                                        {offer.brand?.name?.substring(0, 1) || 'B'}
+                                    </span>
+                                )}
                             </div>
                             <div>
                                 <h1 className="text-3xl font-bold text-neutral-900 dark:text-white">{offer.brand?.name}</h1>

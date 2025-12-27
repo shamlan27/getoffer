@@ -21,6 +21,8 @@ import { AuthProvider } from '@/context/AuthContext';
 import Navbar from '@/components/ui/Navbar';
 import TopTicker from '@/components/ui/TopTicker';
 
+import { ThemeProvider } from '@/context/ThemeContext';
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -29,15 +31,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased transition-colors duration-300`}
       >
-        <AuthProvider>
-          <div className="absolute top-0 left-0 w-full z-50">
-            <TopTicker />
-            <Navbar />
-          </div>
-          {children}
-        </AuthProvider>
+        <ThemeProvider>
+          <AuthProvider>
+            <div className="absolute top-0 left-0 w-full z-50">
+              <TopTicker />
+              <Navbar />
+            </div>
+            {children}
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

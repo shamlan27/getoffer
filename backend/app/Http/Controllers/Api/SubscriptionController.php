@@ -49,4 +49,22 @@ class SubscriptionController extends Controller
             return response()->json(['subscribed' => true, 'message' => 'Subscribed successfully']);
         }
     }
+
+    public function subscribeBrand(Request $request)
+    {
+        // Mock method for frontend compatibility
+        return response()->json([
+            'status' => 'success',
+            'message' => $request->action === 'subscribe' ? 'Subscribed to brand updates!' : 'Unsubscribed from brand.'
+        ]);
+    }
+
+    public function subscribeCategory(Request $request)
+    {
+        // Mock method for frontend compatibility
+        return response()->json([
+            'status' => 'success',
+            'message' => $request->action === 'subscribe' ? 'Subscribed to category updates!' : 'Unsubscribed from category.'
+        ]);
+    }
 }
