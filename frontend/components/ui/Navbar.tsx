@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useAuth } from '@/context/AuthContext';
 import { useTheme } from '@/context/ThemeContext';
 import { User, LogOut, Menu, X, ShoppingBag, Bell, Sun, Moon, Search } from 'lucide-react';
@@ -50,7 +51,7 @@ export default function Navbar() {
                 <div className="container mx-auto px-6 flex justify-between items-center text-neutral-900 dark:text-white transition-colors">
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-2 z-50 group">
-                        <img src="/logo.png" alt="GetOffer Logo" className="w-10 h-10 object-contain" />
+                        <Image src="/logo.png" alt="GetOffer Logo" width={40} height={40} className="object-contain" priority />
                         <span className="text-2xl font-bold tracking-tight">
                             GetOffer<span className="text-[var(--color-secondary)]">.lk</span>
                         </span>

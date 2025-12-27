@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import { Copy, ExternalLink, Clock, CheckCircle, Timer, AlertCircle } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
@@ -73,10 +74,11 @@ export default function OfferCard({ brand, description, code, expiry, verified, 
                 <div className="flex items-center space-x-3">
                     <div className="w-10 h-10 bg-white dark:bg-neutral-800 rounded-full flex items-center justify-center text-lg font-bold text-neutral-500 shadow-sm overflow-hidden border border-neutral-100 dark:border-neutral-700">
                         {logo ? (
-                            <img
+                            <Image
                                 src={logo}
                                 alt={brand}
-                                className="w-full h-full object-cover"
+                                fill
+                                className="object-cover"
                             />
                         ) : (
                             brand.substring(0, 1)
@@ -96,8 +98,14 @@ export default function OfferCard({ brand, description, code, expiry, verified, 
             </div>
 
             {image && variant !== 'compact' && (
-                <div className={`mb-4 rounded-lg overflow-hidden w-full bg-neutral-100 dark:bg-neutral-800 ${variant === 'featured' ? 'h-40' : 'h-32'}`}>
-                    <img src={image} alt={description} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                <div className={`relative mb-4 rounded-lg overflow-hidden w-full bg-neutral-100 dark:bg-neutral-800 ${variant === 'featured' ? 'h-40' : 'h-32'}`}>
+                    <Image
+                        src={image}
+                        alt={description}
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
                 </div>
             )}
 
@@ -109,7 +117,7 @@ export default function OfferCard({ brand, description, code, expiry, verified, 
             <div className="mt-auto pt-4 border-t border-dashed border-neutral-200 dark:border-neutral-800">
                 <div className="flex items-center justify-between gap-3">
                     <div className={`flex items-center text-xs font-medium whitespace-nowrap ${status === 'expired' ? 'text-red-500' :
-                            status === 'expiring' ? 'text-orange-500' : 'text-neutral-500 dark:text-neutral-400'
+                        status === 'expiring' ? 'text-orange-500' : 'text-neutral-500 dark:text-neutral-400'
                         }`}>
                         <Timer className="w-3.5 h-3.5 mr-1.5" /> {timeLeft || 'No expiry'}
                     </div>
@@ -118,8 +126,8 @@ export default function OfferCard({ brand, description, code, expiry, verified, 
                         <button
                             onClick={(e) => { e.preventDefault(); handleCopy(); }}
                             className={`flex items-center justify-center space-x-2 px-3 py-2 rounded-lg font-bold text-xs transition-colors flex-1 max-w-[140px] ${copied
-                                    ? 'bg-green-500 text-white'
-                                    : 'bg-neutral-100 dark:bg-neutral-800 hover:bg-[var(--color-primary)] hover:text-white text-neutral-900 dark:text-neutral-200'
+                                ? 'bg-green-500 text-white'
+                                : 'bg-neutral-100 dark:bg-neutral-800 hover:bg-[var(--color-primary)] hover:text-white text-neutral-900 dark:text-neutral-200'
                                 }`}
                         >
                             {copied ? (
