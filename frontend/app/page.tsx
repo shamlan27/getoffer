@@ -423,6 +423,17 @@ export default function Home() {
           ))}
         </div>
 
+        {/* Browse All Section */}
+        <div className="mt-12 flex justify-center">
+          <Link
+            href="/offers"
+            className="group relative px-8 py-3 rounded-full bg-white/5 border border-white/10 text-white font-semibold hover:bg-[var(--color-primary)] hover:border-[var(--color-primary)] transition-all duration-300 flex items-center gap-2"
+          >
+            <span>Browse All Offers</span>
+            <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </div>
+
 
       </section>
 
