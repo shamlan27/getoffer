@@ -175,8 +175,27 @@ export default function OfferDetail() {
                     <div className="bg-white dark:bg-neutral-900 rounded-2xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-800">
                         <h3 className="font-bold mb-4">Share this offer</h3>
                         <div className="flex space-x-2">
-                            {['Facebook', 'WhatsApp', 'Twitter'].map(platform => (
-                                <button key={platform} className="flex-1 bg-neutral-100 dark:bg-neutral-800 py-2 rounded-lg text-xs font-medium hover:bg-neutral-200 dark:hover:bg-neutral-700 transition">
+                            {['Facebook', 'WhatsApp', 'Twitter', 'Copy Link'].map(platform => (
+                                <button
+                                    key={platform}
+                                    onClick={() => {
+                                        const url = window.location.href;
+                                        const text = `Check out this offer from ${offer.brand?.name}: ${offer.title}`;
+
+                                        if (platform === 'Facebook') {
+                                            window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
+                                        } else if (platform === 'WhatsApp') {
+                                            window.open(`https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`, '_blank');
+                                        } else if (platform === 'Twitter') {
+                                            window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`, '_blank');
+                                        } else if (platform === 'Copy Link') {
+                                            navigator.clipboard.writeText(url);
+                                            // You might want to show a toast here, but for now we'll just rely on user action
+                                            alert('Link copied to clipboard!');
+                                        }
+                                    }}
+                                    className="flex-1 bg-neutral-100 dark:bg-neutral-800 py-2 rounded-lg text-xs font-medium hover:bg-neutral-200 dark:hover:bg-neutral-700 transition"
+                                >
                                     {platform}
                                 </button>
                             ))}
