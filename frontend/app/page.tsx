@@ -8,8 +8,36 @@ import useSWR from 'swr';
 import axios from '@/lib/axios';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { useState } from 'react';
-import { Facebook, Instagram, Twitter, Linkedin, Youtube, ArrowRight, TrendingUp, Grid, Tag } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Facebook, Instagram, Twitter, Linkedin, Youtube, ArrowRight, TrendingUp, Grid, Tag, ChevronLeft, ChevronRight } from 'lucide-react';
+
+// Auto-scroll hook
+const useAutoScroll = (ref: React.RefObject<HTMLDivElement | null>, isPaused: boolean, speed: number = 0.5) => {
+  useEffect(() => {
+    const scrollContainer = ref.current;
+    if (!scrollContainer) return;
+
+    let animationFrameId: number;
+    let exactScroll = scrollContainer.scrollLeft;
+
+    const animate = () => {
+      if (isPaused) return;
+
+      exactScroll += speed;
+      if (exactScroll >= scrollContainer.scrollWidth - scrollContainer.clientWidth) {
+        exactScroll = 0;
+        scrollContainer.scrollLeft = 0;
+      } else {
+        scrollContainer.scrollLeft = exactScroll;
+      }
+
+      animationFrameId = requestAnimationFrame(animate);
+    };
+
+    animationFrameId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [ref, isPaused, speed]);
+};
 
 const fetcher = (url: string) => axios.get(url).then(res => res.data);
 
@@ -20,6 +48,15 @@ export default function Home() {
   const [email, setEmail] = useState('');
   const [subStatus, setSubStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState('');
+
+  // Auto-scroll states
+  const [isFeaturedPaused, setIsFeaturedPaused] = useState(false);
+  const featuredScrollRef = useRef<HTMLDivElement>(null);
+  useAutoScroll(featuredScrollRef, isFeaturedPaused, 0.8);
+
+  const [isBrandsPaused, setIsBrandsPaused] = useState(false);
+  const brandsScrollRef = useRef<HTMLDivElement>(null);
+  useAutoScroll(brandsScrollRef, isBrandsPaused, 0.6);
 
   // API URLs
   const getOffersApiUrl = (isFeatured = false) => {
@@ -42,6 +79,9 @@ export default function Home() {
   const categories = categoriesData || [];
   const brands = brandsData || [];
 
+  // Marquee data
+  const marqueeBrands = brands.length > 0 ? [...brands, ...brands, ...brands] : []; // Triple for smooth looping
+
   const heroBanners = banners.filter((b: any) => b.type === 'standard' || !b.type);
 
   const handleSubscribe = async (e: React.FormEvent) => {
@@ -61,8 +101,14 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-[var(--background)] text-white font-sans selection:bg-[var(--color-primary)] selection:text-white">
 
-      {/* Hero Section */}
-      {heroBanners.length > 0 ? <HeroSlider banners={heroBanners} /> : <Hero />}
+      {/* Hero Section - Force Min Height to avoid collapse */}
+      <div className="relative min-h-[500px] w-full bg-[var(--background)]">
+        {heroBanners.length > 0 ? (
+          <HeroSlider banners={heroBanners} />
+        ) : (
+          <Hero />
+        )}
+      </div>
 
       {/* Stats Ticker (Glass) */}
       <div className="border-y border-white/5 bg-white/[0.02] backdrop-blur-sm -mt-px relative z-20">
@@ -83,7 +129,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-16 space-y-24">
+      <div className="container mx-auto px-4 py-8 md:py-16 space-y-12 md:space-y-24">
 
         {/* SECTION 1: Categories (Bento Grid) */}
         <section>
@@ -142,7 +188,12 @@ export default function Home() {
               <Link href="/offers" className="px-4 py-2 rounded-full border border-white/10 text-sm hover:bg-white hover:text-black transition-all">View All</Link>
             </div>
 
-            <div className="flex overflow-x-auto gap-6 pb-8 no-scrollbar snap-x">
+            <div
+              ref={featuredScrollRef}
+              onMouseEnter={() => setIsFeaturedPaused(true)}
+              onMouseLeave={() => setIsFeaturedPaused(false)}
+              className="flex overflow-x-auto gap-6 pb-8 no-scrollbar snap-x"
+            >
               {featuredOffers.map((offer: any) => (
                 <div key={offer.id} className="min-w-[300px] md:min-w-[400px] snap-center">
                   <Link href={`/offer/${offer.id}`} className="block h-full">
@@ -207,9 +258,14 @@ export default function Home() {
               <p className="text-neutral-400">Join thousands of brands saving you money.</p>
             </div>
 
-            <div className="flex flex-wrapjustify-center gap-8 md:gap-12 items-center justify-center opacity-70">
-              {brands.slice(0, 12).map((brand: any) => (
-                <Link key={brand.id} href={`/brand/${brand.id}`} className="group relative w-16 h-16 md:w-20 md:h-20 grayscale hover:grayscale-0 transition-all duration-500">
+            <div
+              ref={brandsScrollRef}
+              onMouseEnter={() => setIsBrandsPaused(true)}
+              onMouseLeave={() => setIsBrandsPaused(false)}
+              className="flex overflow-x-auto gap-8 md:gap-12 items-center no-scrollbar pb-4"
+            >
+              {marqueeBrands.map((brand: any, idx: number) => (
+                <Link key={`${brand.id}-${idx}`} href={`/brand/${brand.id}`} className="flex-shrink-0 group relative w-16 h-16 md:w-20 md:h-20 grayscale hover:grayscale-0 transition-all duration-500">
                   <div className="absolute inset-0 bg-white/5 rounded-2xl rotate-3 group-hover:rotate-6 transition-transform group-hover:bg-[var(--color-secondary)]/20" />
                   <div className="relative w-full h-full bg-black rounded-xl border border-white/10 flex items-center justify-center p-2 group-hover:-translate-y-2 transition-transform">
                     {brand.logo ? (
@@ -220,7 +276,7 @@ export default function Home() {
                   </div>
                 </Link>
               ))}
-              <Link href="/brands" className="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center rounded-xl border border-dashed border-white/20 text-neutral-400 hover:text-white hover:border-white transition-all">
+              <Link href="/brands" className="flex-shrink-0 w-16 h-16 md:w-20 md:h-20 flex items-center justify-center rounded-xl border border-dashed border-white/20 text-neutral-400 hover:text-white hover:border-white transition-all">
                 <span className="text-sm font-medium">View All</span>
               </Link>
             </div>
@@ -253,7 +309,7 @@ export default function Home() {
                 disabled={subStatus === 'loading'}
                 className="px-8 py-4 rounded-xl bg-white text-[var(--color-primary)] font-bold text-lg hover:scale-105 transition-transform shadow-xl disabled:opacity-50"
               >
-                {subStatus === 'loading' ? 'Joining...' : 'Simulate Success (Dev)'}
+                {subStatus === 'loading' ? 'Joining...' : 'Subscribe'}
               </button>
             </form>
             {subStatus === 'success' && <p className="text-green-300 font-bold">Welcome directly to the club!</p>}
@@ -276,8 +332,12 @@ export default function Home() {
             <Link href="/contact" className="hover:text-white transition">Contact</Link>
           </div>
           <div className="flex gap-4">
-            {[Facebook, Twitter, Instagram].map((Icon, i) => (
-              <a key={i} href="#" className="text-neutral-600 hover:text-white transition"><Icon size={20} /></a>
+            {[
+              { Icon: Facebook, url: 'https://facebook.com' },
+              { Icon: Twitter, url: 'https://twitter.com' },
+              { Icon: Instagram, url: 'https://instagram.com' }
+            ].map(({ Icon, url }, i) => (
+              <a key={i} href={url} target="_blank" rel="noopener noreferrer" className="text-neutral-600 hover:text-white transition"><Icon size={20} /></a>
             ))}
           </div>
         </div>

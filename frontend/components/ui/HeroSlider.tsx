@@ -61,7 +61,7 @@ export default function HeroSlider({ banners }: { banners: Banner[] }) {
 
     return (
         <div
-            className="relative w-full h-[500px] md:h-[600px] bg-[var(--background)] overflow-hidden flex items-center justify-center font-sans"
+            className="relative w-full min-h-[500px] md:h-[600px] bg-[var(--background)] overflow-hidden flex items-center justify-center font-sans"
             onMouseEnter={() => setIsAutoPlaying(false)}
             onMouseLeave={() => setIsAutoPlaying(true)}
         >
@@ -72,9 +72,9 @@ export default function HeroSlider({ banners }: { banners: Banner[] }) {
                 <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.03] z-[1]"></div>
             </div>
 
-            <div className="container mx-auto px-4 h-full relative z-10">
+            <div className="container mx-auto px-4 h-full relative z-10 flex items-center">
                 <AnimatePresence initial={false} custom={direction} mode="wait">
-                    <div key={page} className="w-full h-full grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div key={page} className="w-full grid grid-cols-1 md:grid-cols-2 gap-8 items-center pt-20 md:pt-0">
 
                         {/* Text Content (Left) */}
                         <motion.div
@@ -96,7 +96,7 @@ export default function HeroSlider({ banners }: { banners: Banner[] }) {
                                 </span>
                             )}
 
-                            <h1 className="text-4xl md:text-6xl font-extrabold text-white leading-tight tracking-tight drop-shadow-sm">
+                            <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold text-white leading-tight tracking-tight drop-shadow-sm">
                                 {currentBanner.title || "Discover Exclusive Deals"}
                             </h1>
 
