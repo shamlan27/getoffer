@@ -18,7 +18,7 @@ class SubscriptionController extends Controller
             // Check if already subscribed
             $existing = Subscription::where('email', $request->email)->first();
             if ($existing) {
-                return response()->json(['message' => 'You are already subscribed!'], 200);
+                return response()->json(['message' => 'You are already subscribed!'], 422);
             }
 
             $token = \Illuminate\Support\Str::random(32);

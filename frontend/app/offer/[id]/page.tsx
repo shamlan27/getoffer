@@ -17,6 +17,7 @@ export default function OfferDetail() {
 
     const [subEmail, setSubEmail] = useState('');
     const [subStatus, setSubStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+    const [subMessage, setSubMessage] = useState('');
 
     const handleCopy = () => {
         if (offer?.code) {
@@ -29,12 +30,14 @@ export default function OfferDetail() {
     const handleSubscribe = async () => {
         if (!subEmail) return;
         setSubStatus('loading');
+        setSubMessage('');
         try {
             await axios.post('/api/subscribe', { email: subEmail });
             setSubStatus('success');
             setSubEmail('');
-        } catch (err) {
+        } catch (err: any) {
             setSubStatus('error');
+            setSubMessage(err.response?.data?.message || 'Failed. Please try again.');
         }
     };
 
@@ -158,7 +161,7 @@ export default function OfferDetail() {
                                 {subStatus === 'loading' ? 'Subscribing...' : 'Subscribe'}
                             </button>
                             {subStatus === 'success' && <p className="text-white text-xs mt-2 font-bold">Subscribed successfully!</p>}
-                            {subStatus === 'error' && <p className="text-red-200 text-xs mt-2">Failed. Please try again.</p>}
+                            {subStatus === 'error' && <p className="text-red-200 text-xs mt-2">{subMessage}</p>}
                             <div className="pt-4 border-t border-white/20">
                                 <div className="flex items-center justify-between">
                                     <span className="text-white text-sm font-medium">Push Notifications</span>

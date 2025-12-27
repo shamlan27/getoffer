@@ -67,15 +67,19 @@ export default function Home() {
     ? [...scrollingBanners, ...scrollingBanners]
     : scrollingBanners;
 
+  const [message, setMessage] = useState('');
+
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubStatus('loading');
+    setMessage('');
     try {
       await axios.post('/api/subscribe', { email });
       setSubStatus('success');
       setEmail('');
-    } catch (err) {
+    } catch (err: any) {
       setSubStatus('error');
+      setMessage(err.response?.data?.message || 'Failed to subscribe. Please try again.');
     }
   };
 
@@ -375,6 +379,7 @@ export default function Home() {
                 </button>
               </form>
               {subStatus === 'success' && <p className="text-green-500 text-xs mt-2">Subscribed successfully!</p>}
+              {subStatus === 'error' && <p className="text-red-500 text-xs mt-2">{message}</p>}
             </div>
           </div>
 
