@@ -184,10 +184,10 @@ export default function Home() {
         {/* Categories Pills (Enhanced) */}
         <div className="mb-12">
           <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-6">Browse by Category</h2>
-          <div className="flex flex-wrap gap-4">
+          <div className="flex overflow-x-auto pb-4 md:flex-wrap md:overflow-visible md:pb-0 gap-4 no-scrollbar -mx-6 px-6 md:mx-0 md:px-0 scroll-smooth">
             <button
               onClick={() => setSelectedCategory('')}
-              className={`flex items-center space-x-2 px-5 py-2.5 rounded-full transition-all duration-300 font-medium ${selectedCategory === ''
+              className={`flex-shrink-0 flex items-center space-x-2 px-5 py-2.5 rounded-full transition-all duration-300 font-medium ${selectedCategory === ''
                 ? 'bg-neutral-900 text-white dark:bg-white dark:text-black shadow-lg'
                 : 'bg-neutral-100 text-neutral-600 dark:bg-white/5 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-white/10 border border-transparent dark:border-white/5'
                 }`}
@@ -197,14 +197,14 @@ export default function Home() {
             {categories.map((cat: any) => (
               <div
                 key={cat.id}
-                className={`group flex items-center pl-1 pr-3 py-1 rounded-full border transition-all duration-300 gap-2 ${selectedCategory === cat.slug
+                className={`flex-shrink-0 group flex items-center pl-1 pr-3 py-1 rounded-full border transition-all duration-300 gap-2 ${selectedCategory === cat.slug
                   ? 'bg-[var(--color-primary)]/10 border-[var(--color-primary)] text-[var(--color-primary)]'
                   : 'bg-white/50 dark:bg-white/5 border-neutral-200 dark:border-white/5 text-neutral-600 dark:text-neutral-300'
                   }`}
               >
                 <button
                   onClick={() => setSelectedCategory(cat.slug)}
-                  className={`flex items-center gap-2 px-3 py-1.5 rounded-full ${selectedCategory === cat.slug ? 'text-[var(--color-primary)]' : 'group-hover:text-black dark:group-hover:text-white'} transition-colors`}
+                  className={`flex items-center gap-2 px-3 py-1.5 rounded-full ${selectedCategory === cat.slug ? 'text-[var(--color-primary)]' : 'group-hover:text-black dark:group-hover:text-white'} transition-colors whitespace-nowrap`}
                 >
                   {cat.icon && (
                     cat.icon.startsWith('http') || cat.icon.startsWith('/')
@@ -223,46 +223,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Brands Section (Marquee) */}
-        {brands.length > 0 && (
-          <div className="mb-16 overflow-hidden">
-            <div className="flex justify-between items-end mb-6">
-              <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">Popular Brands</h2>
-              <Link href="/brands" className="text-sm text-neutral-400 hover:text-white transition-colors">View All Brands</Link>
-            </div>
 
-            <div className="relative w-full overflow-hidden group bg-white/5 rounded-3xl p-8 border border-white/5">
-              <div className="flex space-x-12 animate-marquee w-max hover:[animation-play-state:paused] items-center">
-                {marqueeBrands.map((brand: any, idx: number) => (
-                  <div key={`${brand.id}-${idx}`} className="group/brand relative flex flex-col items-center space-y-3 min-w-[90px]">
-                    <div className="relative">
-                      <Link href={`/brand/${brand.id}`} className="block">
-                        <div className="w-20 h-20 bg-[#151515] rounded-2xl shadow-lg flex items-center justify-center border border-white/5 overflow-hidden group-hover/brand:border-[var(--color-primary)] group-hover/brand:shadow-[0_0_20px_rgba(var(--color-primary),0.3)] transition-all duration-500">
-                          {brand.logo ? (
-                            <img
-                              src={brand.logo_url || `${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${brand.logo}`}
-                              alt={brand.name}
-                              className="w-[80%] h-[80%] object-contain filter grayscale-0 md:grayscale md:group-hover/brand:grayscale-0 transition-all duration-500"
-                            />
-                          ) : (
-                            <span className="text-2xl font-bold text-neutral-600 group-hover/brand:text-white">{brand.name.charAt(0)}</span>
-                          )}
-                        </div>
-                      </Link>
-                      <div className="absolute -top-2 -right-2 opacity-0 group-hover/brand:opacity-100 transition-opacity duration-300 z-10">
-                        <SubscribeToggle id={brand.id} type="brand" className="shadow-lg bg-neutral-800 border border-neutral-700 w-8 h-8 flex items-center justify-center !p-0 hover:bg-[var(--color-primary)]" />
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Fades for marquee */}
-              <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[#111] to-transparent pointer-events-none" />
-              <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-[#111] to-transparent pointer-events-none" />
-            </div>
-          </div>
-        )}
 
         {/* Offers Grid */}
         <div className="mb-8 flex items-center justify-between">
@@ -304,6 +265,51 @@ export default function Home() {
             </Link>
           ))}
         </div>
+
+
+      </section>
+
+      <section className="container mx-auto px-6 py-12 border-t border-neutral-200 dark:border-white/5">
+        {/* Brands Section (Marquee) */}
+        {brands.length > 0 && (
+          <div className="overflow-hidden">
+            <div className="flex justify-between items-end mb-6">
+              <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">Popular Brands</h2>
+              <Link href="/brands" className="text-sm text-neutral-400 hover:text-white transition-colors">View All Brands</Link>
+            </div>
+
+            <div className="relative w-full overflow-hidden group bg-white/5 rounded-3xl p-8 border border-white/5">
+              <div className="flex space-x-12 animate-marquee w-max hover:[animation-play-state:paused] items-center">
+                {marqueeBrands.map((brand: any, idx: number) => (
+                  <div key={`${brand.id}-${idx}`} className="group/brand relative flex flex-col items-center space-y-3 min-w-[90px]">
+                    <div className="relative">
+                      <Link href={`/brand/${brand.id}`} className="block">
+                        <div className="w-20 h-20 bg-[#151515] rounded-2xl shadow-lg flex items-center justify-center border border-white/5 overflow-hidden group-hover/brand:border-[var(--color-primary)] group-hover/brand:shadow-[0_0_20px_rgba(var(--color-primary),0.3)] transition-all duration-500">
+                          {brand.logo ? (
+                            <img
+                              src={brand.logo_url || `${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${brand.logo}`}
+                              alt={brand.name}
+                              className="w-[80%] h-[80%] object-contain filter grayscale-0 md:grayscale md:group-hover/brand:grayscale-0 transition-all duration-500"
+                            />
+                          ) : (
+                            <span className="text-2xl font-bold text-neutral-600 group-hover/brand:text-white">{brand.name.charAt(0)}</span>
+                          )}
+                        </div>
+                      </Link>
+                      <div className="absolute -top-2 -right-2 opacity-0 group-hover/brand:opacity-100 transition-opacity duration-300 z-10">
+                        <SubscribeToggle id={brand.id} type="brand" className="shadow-lg bg-neutral-800 border border-neutral-700 w-8 h-8 flex items-center justify-center !p-0 hover:bg-[var(--color-primary)]" />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Fades for marquee */}
+              <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[#111] to-transparent pointer-events-none" />
+              <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-[#111] to-transparent pointer-events-none" />
+            </div>
+          </div>
+        )}
       </section>
 
       {/* Footer (Premium) */}
