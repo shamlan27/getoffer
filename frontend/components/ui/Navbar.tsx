@@ -45,25 +45,28 @@ export default function Navbar() {
 
     return (
         <>
-            <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-[#000000] border-b border-white/10 py-4' : 'bg-transparent py-6'}`}>
+            <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out ${scrolled ? 'bg-black/80 backdrop-blur-md py-3 shadow-[0_4px_30px_rgba(0,0,0,0.5)] border-b border-white/5' : 'bg-transparent py-6'}`}>
                 <div className="container mx-auto px-6 flex justify-between items-center text-white transition-colors">
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-2 z-50 group">
-                        <Image src="/logo.png" alt="GetOffer Logo" width={40} height={40} className="object-contain" priority />
-                        <span className="text-2xl font-bold tracking-tight">
+                        <div className="relative w-10 h-10 flex items-center justify-center bg-white/5 rounded-full backdrop-blur-sm border border-white/5 group-hover:border-[var(--color-primary)]/50 transition-colors">
+                            <Image src="/logo.png" alt="GetOffer Logo" width={28} height={28} className="object-contain" priority />
+                        </div>
+                        <span className="text-2xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-neutral-400 group-hover:to-white transition-all">
                             GetOffer<span className="text-[var(--color-secondary)]">.lk</span>
                         </span>
                     </Link>
 
                     {/* Desktop Nav */}
-                    <nav className="hidden md:flex items-center space-x-1 bg-[#000000] rounded-full px-2 py-1.5 border border-white/10 shadow-none">
+                    <nav className="hidden md:flex items-center space-x-1 bg-white/5 backdrop-blur-md rounded-full px-1.5 py-1.5 border border-white/5 shadow-2xl hover:border-white/10 transition-colors">
                         {['Home', 'Offers', 'Brands', 'Categories'].map((item) => (
                             <Link
                                 key={item}
                                 href={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
-                                className="px-5 py-2 rounded-full text-sm font-medium text-neutral-300 hover:text-white hover:bg-white/10 transition-all"
+                                className="relative px-6 py-2 rounded-full text-sm font-medium text-neutral-300 hover:text-white hover:bg-white/5 transition-all group/navitem overflow-hidden"
                             >
-                                {item}
+                                <span className="relative z-10">{item}</span>
+                                {item === 'Home' && <div className="absolute inset-0 bg-white/5 rounded-full opacity-0" />}
                             </Link>
                         ))}
                     </nav>

@@ -163,8 +163,11 @@ export default function Home() {
       <section className="container mx-auto px-6 py-12 border-b border-[#111] group/brands">
         {brands.length > 0 && (
           <div className="overflow-hidden">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">Popular Brands</h2>
+            <div className="flex justify-between items-center mb-8">
+              <div className="flex items-center gap-3">
+                <div className="w-1.5 h-8 bg-[var(--color-primary)] rounded-full shadow-[0_0_10px_var(--color-primary)]" />
+                <h2 className="text-3xl font-bold text-white tracking-tight">Popular Brands</h2>
+              </div>
               <div className="flex items-center gap-4">
                 <div className="hidden md:flex gap-2 opacity-0 group-hover/brands:opacity-100 transition-opacity">
                   <button
@@ -227,8 +230,11 @@ export default function Home() {
       {/* Scrolling Banners (Trending Promotions) */}
       {scrollingBanners.length > 0 && (
         <section className="py-12 border-b border-[#111] overflow-hidden group/trending">
-          <div className="container mx-auto px-6 mb-6 flex items-center justify-between">
-            <h2 className="text-xl font-medium text-neutral-800 dark:text-white/80">Trending Promotions</h2>
+          <div className="container mx-auto px-6 mb-8 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-1.5 h-8 bg-gradient-to-b from-purple-500 to-pink-500 rounded-full shadow-[0_0_10px_purple]" />
+              <h2 className="text-2xl font-bold text-white tracking-tight">Trending Promotions</h2>
+            </div>
             <div className="flex gap-2 opacity-0 group-hover/trending:opacity-100 transition-opacity">
               <button
                 onClick={() => document.getElementById('trending-scroll')?.scrollBy({ left: -300, behavior: 'smooth' })}
@@ -281,8 +287,11 @@ export default function Home() {
 
           <div className="container mx-auto px-6 mb-8 relative z-10 flex justify-between items-end">
             <div>
-              <h2 className="text-3xl font-bold text-neutral-900 dark:text-white mb-2">Featured Offers</h2>
-              <p className="text-neutral-600 dark:text-neutral-400">Hand-picked deals you shouldn't miss</p>
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-1.5 h-8 bg-[var(--color-secondary)] rounded-full shadow-[0_0_10px_var(--color-secondary)]" />
+                <h2 className="text-3xl font-bold text-white tracking-tight">Featured Offers</h2>
+              </div>
+              <p className="text-neutral-400 pl-4 border-l border-[#222] ml-1">Hand-picked deals you shouldn't miss</p>
             </div>
             <div className="flex items-center gap-4">
               <div className="hidden md:flex gap-2 opacity-0 group-hover/featured:opacity-100 transition-opacity">
@@ -340,7 +349,10 @@ export default function Home() {
       <section className="container mx-auto px-6 py-12" id="categories">
         {/* Categories Pills (Enhanced) */}
         <div className="mb-12">
-          <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-6">Browse by Category</h2>
+          <div className="flex items-center gap-3 mb-8">
+            <div className="w-1.5 h-8 bg-green-500 rounded-full shadow-[0_0_10px_green]" />
+            <h2 className="text-3xl font-bold text-white tracking-tight">Browse by Category</h2>
+          </div>
           <div className="flex overflow-x-auto pb-4 md:flex-wrap md:overflow-visible md:pb-0 gap-4 no-scrollbar -mx-6 px-6 md:mx-0 md:px-0 scroll-smooth">
             <button
               onClick={() => setSelectedCategory('')}
@@ -384,7 +396,10 @@ export default function Home() {
 
         {/* Offers Grid */}
         <div className="mb-8 flex items-center justify-between">
-          <h2 className="text-2xl font-bold text-white">Latest Deals</h2>
+          <div className="flex items-center gap-3">
+            <div className="w-1.5 h-8 bg-blue-500 rounded-full shadow-[0_0_10px_blue]" />
+            <h2 className="text-3xl font-bold text-white tracking-tight">Latest Deals</h2>
+          </div>
           <Link href="/offers" className="px-4 py-2 border border-[#111] rounded-full text-sm font-medium hover:bg-white hover:text-black transition-all">
             Browse All
           </Link>
