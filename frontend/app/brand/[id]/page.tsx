@@ -20,8 +20,24 @@ export default function BrandDetailPage() {
 
     const offers = offersData?.data || [];
 
-    if (brandError) return <div className="text-center py-20">Brand not found.</div>;
-    if (!brand && !brandError) return <div className="text-center py-20">Loading...</div>;
+    if (brandError) return (
+        <div className="flex items-center justify-center min-h-screen pt-20">
+            <div className="text-center">
+                <h1 className="text-2xl font-bold text-neutral-900 dark:text-white mb-2">Brand not found</h1>
+                <Link href="/" className="text-[var(--color-primary)] hover:underline">Return Home</Link>
+            </div>
+        </div>
+    );
+
+    if (!brand && !brandError) return (
+        <div className="flex items-center justify-center min-h-screen pt-20">
+            <div className="flex space-x-1">
+                <div className="w-3 h-3 bg-[var(--color-primary)] rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                <div className="w-3 h-3 bg-[var(--color-primary)] rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                <div className="w-3 h-3 bg-[var(--color-primary)] rounded-full animate-bounce"></div>
+            </div>
+        </div>
+    );
 
     return (
         <main className="min-h-screen bg-gray-50 dark:bg-black pb-20">
